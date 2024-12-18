@@ -55,6 +55,7 @@
 	        home-manager.useUserPackages = true;
 	        home-manager.backupFileExtension = "backup";
 	        home-manager.users.oliver = {
+              home.homeDirectory = /Users/oliver;
               imports = [
                 ./home
                 ./hosts/pilatus/home.nix
