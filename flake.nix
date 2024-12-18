@@ -16,7 +16,7 @@
   };
 
   outputs = {
-    self, 
+    self,
     nixpkgs, 
     darwin,
     home-manager,
@@ -45,7 +45,7 @@
     # macOS systems
     darwinConfigurations = {
       pilatus = darwin.lib.darwinSystem {
-      specialArgs = {inherit inputs outputs;};
+      specialArgs = {inherit self inputs outputs;};
       system = "aarch64-darwin";
         modules = [
           ./hosts/pilatus
@@ -55,7 +55,7 @@
 	        home-manager.useUserPackages = true;
 	        home-manager.backupFileExtension = "backup";
 	        home-manager.users.oliver = {
-              home.homeDirectory = /Users/oliver;
+              home.homeDirectory = nixpkgs.lib.mkForce /Users/oliver;
               imports = [
                 ./home
                 ./hosts/pilatus/home.nix
