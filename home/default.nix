@@ -27,7 +27,7 @@
     userEmail = "oliverwooding@icloud.com";
 
     delta.enable = true; # use delta as the git-diff pager
-    init.defaultBranch = "main"; # set the default branch name to main
+    extraConfig.init.defaultBranch = "main"; # set the default branch name to main
   };
 
   programs.kitty = {
