@@ -55,7 +55,7 @@
 	      home-manager.backupFileExtension = "backup";
 	      home-manager.users.oliver = import ./home;
           home-manager.extraSpecialArgs.extraPkgs 
-            = import ./hosts/pilatus/extra-packages.nix {pkgs = nixpkgs;};
+            = import ./hosts/pilatus/extra-packages.nix;
         }
       ];
     };

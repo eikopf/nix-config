@@ -17,5 +17,5 @@
     racket-minimal          # racket
     rustup                  # rust
     zulu23                  # java
-];
+]
 
