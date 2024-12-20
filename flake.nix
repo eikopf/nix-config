@@ -25,45 +25,39 @@
       inherit (self) outputs;
   in {
     # nixOS systems
-    nixosConfigurations = {
-      rigi = nixpkgs.lib.nixosSystem {
-        specialArgs = {inherit inputs outputs;};
-	    system = "x86_64-linux";
-        modules = [
-          ./hosts/rigi
-	      home-manager.nixosModules.home-manager
-	        {
-              home-manager.useGlobalPkgs = true;
-	          home-manager.useUserPackages = true;
-	          home-manager.backupFileExtension = "backup";
-	          home-manager.users.oliver = (import ./home);
-	        }
-        ];
-      };
+    nixosConfigurations.rigi = nixpkgs.lib.nixosSystem {
+	  system = "x86_64-linux";
+      specialArgs = { inherit inputs outputs; };
+
+      modules = [
+        ./hosts/rigi
+	    home-manager.nixosModules.home-manager
+	    {
+          home-manager.useGlobalPkgs = true;
+	      home-manager.useUserPackages = true;
+	      home-manager.backupFileExtension = "backup";
+	      home-manager.users.oliver = (import ./home);
+	    }
+      ];
     };
 
     # macOS systems
-    darwinConfigurations = {
-      pilatus = darwin.lib.darwinSystem {
-      specialArgs = {inherit self inputs outputs;};
+    darwinConfigurations.pilatus = darwin.lib.darwinSystem {
       system = "aarch64-darwin";
-        modules = [
-          ./hosts/pilatus
-	      home-manager.darwinModules.home-manager
-	      {
-            home-manager.useGlobalPkgs = true;
-	        home-manager.useUserPackages = true;
-	        home-manager.backupFileExtension = "backup";
-	        home-manager.users.oliver = {
-              home.homeDirectory = nixpkgs.lib.mkForce /Users/oliver;
-              imports = [
-                ./home
-                ./hosts/pilatus/home.nix
-              ];
-            };
-	      }
-        ];
-      };
+      specialArgs = { inherit self inputs outputs; };
+
+      modules = [
+        ./hosts/pilatus
+	    home-manager.darwinModules.home-manager
+	    {
+          home-manager.useGlobalPkgs = true;
+	      home-manager.useUserPackages = true;
+	      home-manager.backupFileExtension = "backup";
+	      home-manager.users.oliver = import ./home;
+          home-manager.extraSpecialArgs.extraPkgs 
+            = import ./hosts/pilatus/extra-packages.nix {pkgs = nixpkgs;};
+        }
+      ];
     };
   };
 }

@@ -1,12 +1,7 @@
-# home-manager configuration for pilatus
-
 {
-  config,
-  lib,
   pkgs,
   ...
-}: {
-  home.packages = with pkgs; [
+}: with pkgs; [
     rectangle       # window manager
     tree-sitter     # builds local grammars for neovim
 
@@ -22,5 +17,5 @@
     racket-minimal          # racket
     rustup                  # rust
     zulu23                  # java
-  ];
-}
+];
+

@@ -6,6 +6,9 @@
   pkgs,
   ...
 }: {
+  # give home-manager the home directory path
+  users.users.oliver.home = "/Users/oliver";
+
   # shell
   environment.variables = (import ../../modules/env.nix);
   environment.shells = [ pkgs.fish pkgs.zsh ];
