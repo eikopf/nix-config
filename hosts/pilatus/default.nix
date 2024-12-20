@@ -9,6 +9,11 @@
   # give home-manager the home directory path
   users.users.oliver.home = "/Users/oliver";
 
+  # packages
+  environment.systemPackages 
+    = (import ../../modules/packages.nix pkgs)
+    ++ (import ./extra-packages.nix pkgs);
+
   # shell
   environment.variables = (import ../../modules/env.nix);
   environment.shells = [ pkgs.fish pkgs.zsh ];

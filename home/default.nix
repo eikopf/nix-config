@@ -46,8 +46,8 @@
   programs.starship = {
     enable = true;
     settings = {
-      #character.success_symbol = "";
-      #character.error_symbol   = "";
+      character.success_symbol = "λ";
+      character.error_symbol   = "λ";
 
       hostname.ssh_only = false;
       username = {
