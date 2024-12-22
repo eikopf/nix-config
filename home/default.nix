@@ -52,33 +52,39 @@
       hostname.ssh_only = false;
       username = {
         show_always = true;
-	format = "[$user]($style)@";
+	    format = "[$user]($style)@";
       };
 
       format = lib.concatStrings [
         "$username"
-	"$hostname"
-	"$directory"
-	"$git_branch"
-	"$git_commit"
-	"$git_state"
-	"$git_metrics"
-	"$git_status"
-	"$sudo"
-	"$cmd_duration"
-	"$line_break"
-	"$jobs"
-	"$time"
-	"$status"
-	"$shell"
-	"$character"
+	    "$hostname"
+	    "$directory"
+	    "$git_branch"
+	    "$git_commit"
+	    "$git_state"
+	    "$git_metrics"
+	    "$git_status"
+	    "$sudo"
+	    "$cmd_duration"
+	    "$line_break"
+	    "$jobs"
+	    "$time"
+	    "$status"
+	    "$shell"
+	    "$character"
       ];
     };
   };
 
   programs.neovide = {
     enable = true;
-    settings = { };
+    settings = {
+      frame = "transparent";
+      font = {
+        normal = "BerkeleyMono Nerd Font";
+        size = 15.0;
+      };
+    };
   };
 
   programs.neovim = {

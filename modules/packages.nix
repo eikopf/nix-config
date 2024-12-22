@@ -9,6 +9,7 @@
   git
   readline
   rlwrap
+  tree
   vim
   wget
 

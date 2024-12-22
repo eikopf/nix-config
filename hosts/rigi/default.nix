@@ -20,7 +20,7 @@
   
   # user
   users.users.oliver = {
-    home = /home/oliver/;
+    home = /home/oliver;
     isNormalUser = true;
     shell = pkgs.fish;
     description = "Oliver Wooding";
