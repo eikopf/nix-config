@@ -15,49 +15,51 @@
     };
   };
 
-  outputs = {
-    self,
-    nixpkgs, 
-    darwin,
-    home-manager,
-    ... 
-  } @ inputs: let
+  outputs =
+    {
+      self,
+      nixpkgs,
+      darwin,
+      home-manager,
+      ...
+    }@inputs:
+    let
       inherit (self) outputs;
-  in {
-    # nixOS systems
-    nixosConfigurations.rigi = nixpkgs.lib.nixosSystem {
-	  system = "x86_64-linux";
-      specialArgs = { inherit inputs outputs; };
+    in
+    {
+      # nixOS systems
+      nixosConfigurations.rigi = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs outputs; };
 
-      modules = [
-        ./hosts/rigi
-	    home-manager.nixosModules.home-manager
-	    {
-          home-manager.useGlobalPkgs = true;
-	      home-manager.useUserPackages = true;
-	      home-manager.backupFileExtension = "backup";
-	      home-manager.users.oliver = (import ./home);
-	    }
-      ];
+        modules = [
+          ./hosts/rigi
+          home-manager.nixosModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.oliver = (import ./home);
+          }
+        ];
+      };
+
+      # macOS systems
+      darwinConfigurations.pilatus = darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        specialArgs = { inherit self inputs outputs; };
+
+        modules = [
+          ./hosts/pilatus
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.oliver = import ./home;
+            home-manager.extraSpecialArgs.extraPkgs = import ./hosts/pilatus/extra-packages.nix;
+          }
+        ];
+      };
     };
-
-    # macOS systems
-    darwinConfigurations.pilatus = darwin.lib.darwinSystem {
-      system = "aarch64-darwin";
-      specialArgs = { inherit self inputs outputs; };
-
-      modules = [
-        ./hosts/pilatus
-	    home-manager.darwinModules.home-manager
-	    {
-          home-manager.useGlobalPkgs = true;
-	      home-manager.useUserPackages = true;
-	      home-manager.backupFileExtension = "backup";
-	      home-manager.users.oliver = import ./home;
-          home-manager.extraSpecialArgs.extraPkgs 
-            = import ./hosts/pilatus/extra-packages.nix;
-        }
-      ];
-    };
-  };
 }

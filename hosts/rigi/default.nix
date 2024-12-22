@@ -1,15 +1,15 @@
-
 {
   inputs,
   lib,
   config,
   pkgs,
   ...
-}: {
-  imports =
-    [ # generated hardware configuration
-      ./hardware-configuration.nix
-    ];
+}:
+{
+  imports = [
+    # generated hardware configuration
+    ./hardware-configuration.nix
+  ];
 
   # nix garbage collection
   nix.gc = {
@@ -17,19 +17,22 @@
     randomizedDelaySec = "14m";
     options = "--delete-older-than 10d";
   };
-  
+
   # user
   users.users.oliver = {
     home = /home/oliver;
     isNormalUser = true;
     shell = pkgs.fish;
     description = "Oliver Wooding";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
   };
 
   # shell
   programs.fish.enable = true;
-  
+
   # bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -74,7 +77,7 @@
 
   # graphics
   hardware.graphics.enable = true;
-  services.xserver.videoDrivers = ["nvidia"];
+  services.xserver.videoDrivers = [ "nvidia" ];
   hardware.nvidia = {
     modesetting.enable = true;
     powerManagement.enable = true;

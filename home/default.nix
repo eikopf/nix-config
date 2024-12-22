@@ -4,16 +4,15 @@
   lib,
   extraPkgs,
   ...
-}: {
+}:
+{
   home.username = "oliver";
-  home.packages 
-    = (import ../modules/packages.nix pkgs)
-    ++ (extraPkgs pkgs);
+  home.packages = (import ../modules/packages.nix pkgs) ++ (extraPkgs pkgs);
 
   home.stateVersion = "24.11";
   programs.home-manager.enable = true;
 
-  programs.eza.enable    = true;
+  programs.eza.enable = true;
   programs.zoxide.enable = true;
 
   programs.fish = {
@@ -47,31 +46,31 @@
     enable = true;
     settings = {
       character.success_symbol = "λ";
-      character.error_symbol   = "λ";
+      character.error_symbol = "λ";
 
       hostname.ssh_only = false;
       username = {
         show_always = true;
-	    format = "[$user]($style)@";
+        format = "[$user]($style)@";
       };
 
       format = lib.concatStrings [
         "$username"
-	    "$hostname"
-	    "$directory"
-	    "$git_branch"
-	    "$git_commit"
-	    "$git_state"
-	    "$git_metrics"
-	    "$git_status"
-	    "$sudo"
-	    "$cmd_duration"
-	    "$line_break"
-	    "$jobs"
-	    "$time"
-	    "$status"
-	    "$shell"
-	    "$character"
+        "$hostname"
+        "$directory"
+        "$git_branch"
+        "$git_commit"
+        "$git_state"
+        "$git_metrics"
+        "$git_status"
+        "$sudo"
+        "$cmd_duration"
+        "$line_break"
+        "$jobs"
+        "$time"
+        "$status"
+        "$shell"
+        "$character"
       ];
     };
   };

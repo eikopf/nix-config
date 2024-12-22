@@ -3,7 +3,9 @@
 {
   pkgs,
   ...
-}: with pkgs; [
+}:
+with pkgs;
+[
   # essentials
   curl
   git
@@ -12,6 +14,9 @@
   tree
   vim
   wget
+
+  # nix-specifics
+  nixfmt-rfc-style
 
   # terminal emulator
   kitty

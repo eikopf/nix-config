@@ -5,18 +5,21 @@
   config,
   pkgs,
   ...
-}: {
+}:
+{
   # give home-manager the home directory path
   users.users.oliver.home = "/Users/oliver";
 
   # packages
-  environment.systemPackages 
-    = (import ../../modules/packages.nix pkgs)
-    ++ (import ./extra-packages.nix pkgs);
+  environment.systemPackages =
+    (import ../../modules/packages.nix pkgs) ++ (import ./extra-packages.nix pkgs);
 
   # shell
   environment.variables = (import ../../modules/env.nix);
-  environment.shells = [ pkgs.fish pkgs.zsh ];
+  environment.shells = [
+    pkgs.fish
+    pkgs.zsh
+  ];
   environment.shellAliases = (import ../../modules/aliases.nix);
   programs.fish.enable = true;
   users.users.oliver.shell = pkgs.fish;
@@ -31,7 +34,7 @@
     dock.autohide = true;
     dock.mru-spaces = false;
     finder.AppleShowAllExtensions = true;
-    finder.FXPreferredViewStyle = "clmv";   # use columns in Finder by default
+    finder.FXPreferredViewStyle = "clmv"; # use columns in Finder by default
     NSGlobalDomain.AppleICUForce24HourTime = true;
     NSGlobalDomain.NSAutomaticSpellingCorrectionEnabled = false;
   };
