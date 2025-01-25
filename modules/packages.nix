@@ -27,6 +27,7 @@ with pkgs;
   fzf
   hyfetch
   jq
+  jujutsu
   pandoc
   ripgrep
   starship
