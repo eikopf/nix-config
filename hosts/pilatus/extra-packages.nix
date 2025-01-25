@@ -4,8 +4,8 @@
 }:
 with pkgs;
 [
+  # GUIs
   rectangle # window manager
-  tree-sitter # builds local grammars for neovim
 
   # languages
   chez # chezscheme
@@ -20,4 +20,8 @@ with pkgs;
   racket-minimal # racket
   rustup # rust
   zulu23 # java
+
+  # language tooling
+  tree-sitter # builds local grammars for neovim
+  idris2Packages.idris2Lsp # idris2 LSP
 ]
