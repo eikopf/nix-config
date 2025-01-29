@@ -39,4 +39,5 @@ with pkgs;
   janet
   nodejs
   rustup
+  uv
 ]
