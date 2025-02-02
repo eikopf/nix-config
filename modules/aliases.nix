@@ -9,7 +9,4 @@
   # eza
   exa = "eza";
   ezaa = "eza -alh";
-
-  # zoxide
-  cd = "z";
 }
