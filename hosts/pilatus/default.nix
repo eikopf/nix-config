@@ -10,6 +10,12 @@
   # give home-manager the home directory path
   users.users.oliver.home = "/Users/oliver";
 
+  # add main user to trusted users
+  nix.settings.trusted-users = [
+    "root"
+    "oliver"
+  ];
+
   # packages
   environment.systemPackages =
     (import ../../modules/packages.nix pkgs) ++ (import ./extra-packages.nix pkgs);
