@@ -16,6 +16,7 @@ with pkgs;
   wget
 
   # nix-specifics
+  devenv
   nixfmt-rfc-style
 
   # terminal emulator
