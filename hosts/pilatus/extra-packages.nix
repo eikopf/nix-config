@@ -17,6 +17,7 @@ with pkgs;
   luajit # lua
   luajitPackages.fennel # fennel
   nodejs # javascript
+  opam # ocaml
   racket-minimal # racket
   rustup # rust
   zulu23 # java
