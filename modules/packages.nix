@@ -17,6 +17,7 @@ with pkgs;
 
   # nix-specifics
   devenv
+  direnv
   nixfmt-rfc-style
 
   # terminal emulator

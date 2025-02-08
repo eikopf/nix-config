@@ -27,10 +27,17 @@
   programs.git = {
     enable = true;
     userName = "oliver";
-    userEmail = "oliverwooding@icloud.com";
+    userEmail = "oliver@wooding.dev";
 
     delta.enable = true; # use delta as the git-diff pager
     extraConfig.init.defaultBranch = "main"; # set the default branch name to main
+  };
+
+  programs.direnv = {
+    enable = true;
+
+    # fish integration is enabled by default because it's set as the login shell
+    enableBashIntegration = true;
   };
 
   programs.kitty = {
@@ -54,7 +61,14 @@
         format = "[$user]($style)@";
       };
 
+      direnv = {
+        disabled = false;
+        symbol = "direnv";
+        format = "[\\($symbol\\)]($style) ";
+      };
+
       format = lib.concatStrings [
+        "$direnv"
         "$username"
         "$hostname"
         "$directory"
