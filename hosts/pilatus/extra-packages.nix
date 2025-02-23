@@ -25,6 +25,7 @@ with pkgs;
   # language tooling
   dune_3
   tree-sitter
+  fennel-ls
   idris2Packages.idris2Lsp
   ocamlPackages.utop
   ocamlPackages.ocaml-lsp
