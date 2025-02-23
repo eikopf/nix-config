@@ -17,12 +17,15 @@ with pkgs;
   luajit # lua
   luajitPackages.fennel # fennel
   nodejs # javascript
-  opam # ocaml
+  ocaml # ocaml
   racket-minimal # racket
   rustup # rust
   zulu23 # java
 
   # language tooling
-  tree-sitter # builds local grammars for neovim
-  idris2Packages.idris2Lsp # idris2 LSP
+  dune_3
+  tree-sitter
+  idris2Packages.idris2Lsp
+  ocamlPackages.utop
+  ocamlPackages.ocaml-lsp
 ]
