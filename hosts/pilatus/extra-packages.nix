@@ -30,6 +30,7 @@ with pkgs;
   idris2Packages.idris2Lsp
   ocamlPackages.utop
   ocamlPackages.ocaml-lsp
+  ocamlPackages.ocamlformat
 
   # haskell-tools.nvim prerequisites
   haskellPackages.fast-tags
