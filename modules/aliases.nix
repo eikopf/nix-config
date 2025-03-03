@@ -1,6 +1,7 @@
 {
   # git
   gs = "git status";
+  gl = "git log --graph --decorate --oneline --all";
 
   # jujutsu (jj)
   js = "jj status --no-pager";
