@@ -14,7 +14,6 @@ with pkgs;
   go # go
   idris2 # idris2
   janet # janet
-  julia-bin # julia
   luajit # lua
   luajitPackages.fennel # fennel
   nodejs # javascript
