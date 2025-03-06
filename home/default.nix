@@ -32,6 +32,18 @@
     enableFishIntegration = true;
   };
 
+  programs.jujutsu = {
+    enable = true;
+    settings = {
+      ui.editor = "nvim";
+
+      user = {
+        name = "oliver";
+        email = "oliver@wooding.dev";
+      };
+    };
+  };
+
   programs.git = {
     enable = true;
     userName = "oliver";
