@@ -38,20 +38,24 @@
   services.yabai = {
     enable = true;
 
-    config = {
-      # mouse
-      mouse_modifier = "fn";
-      mouse_follows_focus = "off";
-      focus_follows_mouse = "off";
+    config =
+      let
+        padding = 8;
+      in
+      {
+        # mouse
+        mouse_modifier = "fn";
+        mouse_follows_focus = "off";
+        focus_follows_mouse = "off";
 
-      # layout
-      layout = "bsp";
-      top_padding = 12;
-      bottom_padding = 12;
-      left_padding = 12;
-      right_padding = 12;
-      window_gap = 12;
-    };
+        # layout
+        layout = "bsp";
+        top_padding = padding;
+        bottom_padding = padding;
+        left_padding = padding;
+        right_padding = padding;
+        window_gap = padding;
+      };
 
     extraConfig = "yabai -m rule --add app='^System Settings$' manage=off";
   };
