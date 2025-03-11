@@ -4,8 +4,8 @@
 }:
 with pkgs;
 [
-  # window manager
-  # rectangle
+  # macOS utilities
+  skhd
   yabai
 
   # languages

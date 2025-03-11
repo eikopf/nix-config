@@ -34,6 +34,16 @@
   services.nix-daemon.enable = true;
   nix.settings.experimental-features = "nix-command flakes";
 
+  # skhd
+  services.skhd = {
+    enable = true;
+
+    skhdConfig = lib.strings.concatLines [
+      "cmd - return: /Applications/Ghostty.app/Contents/MacOS/ghostty"
+      "cmd + shift - return: neovide"
+    ];
+  };
+
   # yabai
   services.yabai = {
     enable = true;
