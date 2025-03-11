@@ -124,4 +124,12 @@
     enable = true;
     defaultEditor = true;
   };
+
+  programs.yabai = {
+    enable = true;
+    config = {
+      mouse_follows_focus = "off";
+      focus_follows_mouse = "off";
+    };
+  };
 }

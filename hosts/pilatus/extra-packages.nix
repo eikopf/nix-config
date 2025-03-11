@@ -4,8 +4,9 @@
 }:
 with pkgs;
 [
-  # GUIs
-  rectangle # window manager
+  # window manager
+  # rectangle
+  yabai
 
   # languages
   chez # chezscheme
