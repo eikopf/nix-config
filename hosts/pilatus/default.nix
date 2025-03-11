@@ -39,7 +39,7 @@
     enable = true;
 
     skhdConfig = lib.strings.concatLines [
-      "cmd - return: /Applications/Ghostty.app/Contents/MacOS/ghostty"
+      "cmd - return: open /Applications/Ghostty.app"
       "cmd + shift - return: neovide"
     ];
   };
