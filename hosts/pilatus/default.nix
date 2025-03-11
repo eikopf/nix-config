@@ -37,12 +37,23 @@
   # yabai
   services.yabai = {
     enable = true;
+
     config = {
+      # mouse
       mouse_modifier = "fn";
       mouse_follows_focus = "off";
       focus_follows_mouse = "off";
+
+      # layout
       layout = "bsp";
+      top_padding = 12;
+      bottom_padding = 12;
+      left_padding = 12;
+      right_padding = 12;
+      window_gap = 12;
     };
+
+    extraConfig = "yabai -m rule --add app='^System Settings$' manage=off";
   };
 
   # macOS config
