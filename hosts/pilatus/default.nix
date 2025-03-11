@@ -34,6 +34,15 @@
   services.nix-daemon.enable = true;
   nix.settings.experimental-features = "nix-command flakes";
 
+  # yabai
+  services.yabai = {
+    enable = true;
+    config = {
+      mouse_follows_focus = "off";
+      focus_follows_mouse = "off";
+    };
+  };
+
   # macOS config
   security.pam.enableSudoTouchIdAuth = true;
   system.defaults = {
