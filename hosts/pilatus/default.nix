@@ -38,8 +38,10 @@
   services.yabai = {
     enable = true;
     config = {
+      mouse_modifier = "fn";
       mouse_follows_focus = "off";
       focus_follows_mouse = "off";
+      layout = "bsp";
     };
   };
 
