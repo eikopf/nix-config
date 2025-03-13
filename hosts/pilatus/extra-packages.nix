@@ -15,8 +15,6 @@ with pkgs;
   go # go
   idris2 # idris2
   janet # janet
-  luajit # lua
-  luajitPackages.fennel # fennel
   nodejs # javascript
   ocaml # ocaml
   racket-minimal # racket
@@ -32,8 +30,13 @@ with pkgs;
   idris2Packages.idris2Lsp
 
   # lua/fennel
+  (luajit.withPackages (
+    ps: with ps; [
+      fennel
+      readline
+    ]
+  ))
   fennel-ls
-  luajitPackages.readline
 
   # ocaml
   dune_3
