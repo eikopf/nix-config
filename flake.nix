@@ -26,18 +26,15 @@
     let
       inherit (self) outputs;
 
-      languages = import ./modules/languages { inherit (nixpkgs) lib; };
-
       mkNixosHost =
         name: system: extraModules:
         nixpkgs.lib.nixosSystem {
           inherit system;
-          specialArgs = { inherit languages inputs outputs; };
+          specialArgs = { inherit inputs outputs; };
 
           modules = [
             ./hosts/${name}
             ./modules/common
-            ./modules/languages/selection.nix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
@@ -52,19 +49,11 @@
         name: system: extraModules:
         darwin.lib.darwinSystem {
           inherit system;
-          specialArgs = {
-            inherit
-              self
-              languages
-              inputs
-              outputs
-              ;
-          };
+          specialArgs = { inherit self inputs outputs; };
 
           modules = [
             ./hosts/${name}
             ./modules/common
-            ./modules/languages/selection.nix
             home-manager.darwinModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
