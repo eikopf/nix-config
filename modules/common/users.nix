@@ -11,20 +11,11 @@ in
     home = if isDarwin then /Users/oliver else /home/oliver;
     shell = pkgs.fish;
 
-    extraGroups =
-      if isDarwin then
-        [
-          "staff"
-          "admin"
-        ]
-      else
-        [
-          "networkmanager"
-          "wheel"
-        ];
-
-    # this key is only valid for NixOS hosts, so we
-    # use `lib.mkIf` to conditionally include it
+    # these keys only exist on linux hosts
+    extraGroups = lib.mkIf isLinux [
+      "wheel"
+      "networkmanager"
+    ];
     isNormalUser = lib.mkIf isLinux true;
   };
 }
