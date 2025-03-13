@@ -17,7 +17,8 @@
   # automate garbage collection
   nix.gc = {
     automatic = true;
-    options = "--delete-older-than 30d";
+    randomizedDelaySec = "14m";
+    options = "--delete-older-than 10d";
   };
 
   # set trusted users

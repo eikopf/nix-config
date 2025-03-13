@@ -66,7 +66,7 @@
     in
     {
       nixosConfigurations = {
-        #rigi = mkNixosHost "rigi" "x86_64-linux" [ ];
+        rigi = mkNixosHost "rigi" "x86_64-linux" [ ];
       };
 
       darwinConfigurations = {

@@ -1,3 +1,6 @@
+# NOTE: this host is still probably broken, but can't be checked without an
+# available nixos machine
+
 {
   inputs,
   lib,
