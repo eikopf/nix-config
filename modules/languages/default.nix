@@ -8,8 +8,8 @@
 }:
 {
   agda = {
-    options.languages.agda.enable = lib.mkEnableOption "Enable Agda support";
-    config = lib.mkIf config.languages.agda.enable {
+    options.enabledLanguages.agda.enable = lib.mkEnableOption "Enable Agda support";
+    config = lib.mkIf config.enabledLanguages.agda.enable {
       environment.systemPackages = with pkgs; [ agda ];
 
       environment.variables = {
