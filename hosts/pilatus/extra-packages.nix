@@ -23,11 +23,20 @@ with pkgs;
   rustup # rust
   zulu23 # java
 
-  # language tooling
-  dune_3
+  # LANGUAGE TOOLING
+
+  # general
   tree-sitter
-  fennel-ls
+
+  # idris
   idris2Packages.idris2Lsp
+
+  # lua/fennel
+  fennel-ls
+  luajitPackages.readline
+
+  # ocaml
+  dune_3
   ocamlPackages.utop
   ocamlPackages.ocaml-lsp
   ocamlPackages.ocamlformat
