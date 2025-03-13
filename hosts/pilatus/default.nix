@@ -7,6 +7,7 @@
   imports = [
     ../../modules/languages/chez.nix
     ../../modules/languages/haskell.nix
+    ../../modules/languages/idris.nix
     ../../modules/languages/janet.nix
     ../../modules/languages/java.nix
     ../../modules/languages/javascript.nix
