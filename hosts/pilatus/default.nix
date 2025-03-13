@@ -11,7 +11,7 @@
 
   users.users.oliver.home = "/Users/oliver";
 
-  enabledLanguages = with languages; [
+  config.languages = with languages; [
     chez
     haskell
     idris
