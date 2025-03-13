@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, ... }@inputs:
 {
   imports = [
     ./nix.nix
@@ -7,8 +7,8 @@
   ];
 
   environment.systemPackages = lib.mkMerge [
-    (import ./base.nix).environment.systemPackages
-    (import ./shell.nix).environment.systemPackages
+    (import ./nix.nix inputs).environment.systemPackages
+    (import ./shell.nix inputs).environment.systemPackages
 
     # base packages installed by all hosts
     (with pkgs; [

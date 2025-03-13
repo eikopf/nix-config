@@ -19,6 +19,8 @@
     ../../modules/darwin
   ];
 
+  users.users.oliver.home = "/Users/oliver";
+
   environment.systemPackages = with pkgs; [ ];
 
   # set git commit hash for darwin-version.

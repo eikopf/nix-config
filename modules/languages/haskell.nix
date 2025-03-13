@@ -6,7 +6,7 @@
     (pkgs.haskellPackages.ghc.withPackages (
       ps: with ps; [
         fast-tags
-        haskell-debug-adaptor
+        haskell-debug-adapter
         haskell-language-server
         hoogle
         stack

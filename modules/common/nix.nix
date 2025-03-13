@@ -12,12 +12,11 @@
   ];
 
   # automatically deduplicate store paths
-  nix.settings.auto-optimise-store = true;
+  nix.optimise.automatic = true;
 
   # automate garbage collection
   nix.gc = {
     automatic = true;
-    dates = "weekly";
     options = "--delete-older-than 30d";
   };
 

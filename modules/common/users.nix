@@ -6,16 +6,19 @@ let
   isLinux = pkgs.stdenv.isLinux;
 in
 {
-  users.users.oliver = {
-    description = "Oliver Wooding";
-    home = if isDarwin then /Users/oliver else /home/oliver;
-    shell = pkgs.fish;
+  users.users.oliver =
+    {
+      description = "Oliver Wooding";
+      home = if isDarwin then /Users/oliver else /home/oliver;
+      shell = pkgs.fish;
 
+    }
     # these keys only exist on linux hosts
-    extraGroups = lib.mkIf isLinux [
-      "wheel"
-      "networkmanager"
-    ];
-    isNormalUser = lib.mkIf isLinux true;
-  };
+    // lib.mkIf isLinux {
+      extraGroups = [
+        "wheel"
+        "networkmanager"
+      ];
+      isNormalUser = true;
+    };
 }

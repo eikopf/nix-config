@@ -24,10 +24,14 @@
       ...
     }@inputs:
     let
+      inherit (self) outputs;
+
       mkNixosHost =
         name: system: extraModules:
         nixpkgs.lib.nixosSystem {
           inherit system;
+          specialArgs = { inherit inputs outputs; };
+
           modules = [
             ./hosts/${name}
             ./modules/common
@@ -45,6 +49,8 @@
         name: system: extraModules:
         darwin.lib.darwinSystem {
           inherit system;
+          specialArgs = { inherit self inputs outputs; };
+
           modules = [
             ./hosts/${name}
             ./modules/common
