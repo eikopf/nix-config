@@ -24,42 +24,47 @@
       ...
     }@inputs:
     let
-      inherit (self) outputs;
+      mkNixosHost =
+        name: system: extraModules:
+        nixpkgs.lib.nixosSystem {
+          inherit system;
+          modules = [
+            ./hosts/${name}
+            ./modules/common
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+              home-manager.users.oliver = (import ./home);
+            }
+          ] ++ extraModules;
+        };
+
+      mkDarwinHost =
+        name: system: extraModules:
+        darwin.lib.darwinSystem {
+          inherit system;
+          modules = [
+            ./hosts/${name}
+            ./modules/common
+            home-manager.darwinModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.backupFileExtension = "backup";
+              home-manager.users.oliver = import ./home;
+            }
+          ] ++ extraModules;
+        };
     in
     {
-      # nixOS systems
-      nixosConfigurations.rigi = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = { inherit inputs outputs; };
-
-        modules = [
-          ./hosts/rigi
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.users.oliver = (import ./home);
-          }
-        ];
+      nixosConfigurations = {
+        #rigi = mkNixosHost "rigi" "x86_64-linux" [ ];
       };
 
-      # macOS systems
-      darwinConfigurations.pilatus = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
-        specialArgs = { inherit self inputs outputs; };
-
-        modules = [
-          ./hosts/pilatus
-          home-manager.darwinModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.backupFileExtension = "backup";
-            home-manager.users.oliver = import ./home;
-            home-manager.extraSpecialArgs.extraPkgs = import ./hosts/pilatus/extra-packages.nix;
-          }
-        ];
+      darwinConfigurations = {
+        pilatus = mkDarwinHost "pilatus" "aarch64-darwin" [ ];
       };
     };
 }

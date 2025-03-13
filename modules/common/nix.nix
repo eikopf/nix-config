@@ -1,0 +1,36 @@
+# common nix configuration
+
+{
+  pkgs,
+  ...
+}:
+{
+  # enable flakes and modern nix command
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
+
+  # automatically deduplicate store paths
+  nix.settings.auto-optimise-store = true;
+
+  # automate garbage collection
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 30d";
+  };
+
+  # set trusted users
+  nix.settings.trusted-users = [
+    "root"
+    "oliver"
+  ];
+
+  # nix utilities
+  environment.systemPackages = with pkgs; [
+    devenv
+    direnv
+    nixfmt-rfc-style
+  ];
+}
