@@ -6,33 +6,20 @@
 }:
 
 let
-  activeLanguages = builtins.listToAttrs (
-    map (lang: {
-      name = lang;
-      value = languages.${lang}.cfgFn config;
-    }) config.enabledLanguages
-  );
+  activeLanguages = map (lang: languages.${lang.name}.cfgFn config) config.enabledLanguages;
 in
 {
   options.enabledLanguages = lib.mkOption {
-    type = lib.types.listOf (lib.types.enum (builtins.attrNames languages));
+    type = lib.types.listOf lib.types.attrs; # not perfectly accurate
     default = [ ];
     description = "List of enabled programming language configurations.";
   };
 
   config = {
-    environment.systemPackages = lib.flatten (
-      map (lang: activeLanguages.${lang}.packages) config.enabledLanguages
-    );
+    environment.systemPackages = lib.flatten (map (lang: lang.packages.content) activeLanguages);
 
-    environment.variables = lib.mkMerge (
-      map (
-        lang:
-        let
-          langConfig = activeLanguages.${lang};
-        in
-        lib.mkIf (builtins.elem lang config.enabledLanguages) langConfig.env
-      ) config.enabledLanguages
-    );
+    environment.variables = builtins.foldl' (
+      acc: langCfg: acc // langCfg.env.content
+    ) { } activeLanguages;
   };
 }
