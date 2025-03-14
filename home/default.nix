@@ -1,13 +1,9 @@
 {
-  config,
-  pkgs,
   lib,
-  extraPkgs,
   ...
 }:
 {
   home.username = "oliver";
-  #home.packages = (import ../modules/packages.nix pkgs) ++ (extraPkgs pkgs);
 
   home.stateVersion = "24.11";
   programs.home-manager.enable = true;

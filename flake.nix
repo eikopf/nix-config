@@ -68,6 +68,7 @@
           modules = [
             ./hosts/${name}
             ./modules/common
+            ./modules/darwin
             ./modules/languages/selection.nix
             home-manager.darwinModules.home-manager
             {
