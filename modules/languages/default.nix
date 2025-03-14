@@ -38,7 +38,7 @@ in
     ];
   });
 
-  idris = mkLang "idris" (config: {
+  idris2 = mkLang "idris2" (config: {
     packages = with pkgs; [
       idris2
       idris2Packages.idris2Lsp

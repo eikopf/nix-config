@@ -9,7 +9,7 @@
   enabledLanguages = with languages; [
     chez
     haskell
-    idris
+    idris2
     janet
     java
     javascript
