@@ -1,12 +1,11 @@
 {
   lib,
   config,
-  languages,
   ...
 }:
 
 let
-  activeLanguages = map (lang: languages.${lang.name}.cfgFn config) config.enabledLanguages;
+  langs = map (lang: lang.cfgFn config) config.enabledLanguages;
 in
 {
   options.enabledLanguages = lib.mkOption {
@@ -16,10 +15,10 @@ in
   };
 
   config = {
-    environment.systemPackages = lib.flatten (map (lang: lang.packages.content) activeLanguages);
-
-    environment.variables = builtins.foldl' (
-      acc: langCfg: acc // langCfg.env.content
-    ) { } activeLanguages;
+    # we refer to lang.packages.content here to force the evaluation of the
+    # package list; this is necessary due to how derivations differ from ordinary
+    # nix values
+    environment.systemPackages = lib.concatMap (lang: lang.packages.content) langs;
+    environment.variables = lib.mergeAttrsList (map (lang: lang.env) langs);
   };
 }
