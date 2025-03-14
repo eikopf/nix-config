@@ -1,17 +1,8 @@
-{ pkgs, lib, ... }:
+{ pkgs, ... }:
 
 let
   mkLang = name: cfgFn: {
-    inherit name;
-    cfgFn =
-      config:
-      let
-        cfg = cfgFn config;
-      in
-      {
-        packages = lib.mkDefault (cfg.packages or null);
-        env = lib.mkDefault (cfg.env or { });
-      };
+    inherit name cfgFn;
   };
 in
 {

@@ -15,10 +15,7 @@ in
   };
 
   config = {
-    # we refer to lang.packages.content here to force the evaluation of the
-    # package list; this is necessary due to how derivations differ from ordinary
-    # nix values
-    environment.systemPackages = lib.concatMap (lang: lang.packages.content) langs;
-    environment.variables = lib.mergeAttrsList (map (lang: lang.env) langs);
+    environment.systemPackages = lib.concatMap (lang: lang.packages) langs;
+    environment.variables = lib.mergeAttrsList (map (lang: lang.env or { }) langs);
   };
 }
