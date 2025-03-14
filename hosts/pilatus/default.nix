@@ -1,28 +1,29 @@
 {
   self,
-  pkgs,
+  languages,
   ...
 }:
 {
   imports = [
-    ../../modules/languages/chez.nix
-    ../../modules/languages/haskell.nix
-    ../../modules/languages/idris.nix
-    ../../modules/languages/janet.nix
-    ../../modules/languages/java.nix
-    ../../modules/languages/javascript.nix
-    ../../modules/languages/lean.nix
-    ../../modules/languages/lua.nix
-    ../../modules/languages/ocaml.nix
-    ../../modules/languages/python.nix
-    ../../modules/languages/racket.nix
-    ../../modules/languages/rust.nix
     ../../modules/darwin
   ];
 
   users.users.oliver.home = "/Users/oliver";
 
-  environment.systemPackages = with pkgs; [ ];
+  enabledLanguages = with languages; [
+    chez
+    haskell
+    idris
+    janet
+    java
+    javascript
+    lean
+    lua
+    ocaml
+    python
+    racket
+    rust
+  ];
 
   # set git commit hash for darwin-version.
   system.configurationRevision = self.rev or self.dirtyRev or null;
