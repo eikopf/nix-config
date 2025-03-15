@@ -1,3 +1,9 @@
+# simple module for applying `config.enabledLanguages` to the configuration
+
+# this module is responsible for
+# 1. defining the `enabledLanguages` option, and;
+# 2. processing `config.enabledLanguages` to update the configuration.
+
 {
   lib,
   config,
@@ -15,7 +21,7 @@ in
   };
 
   config = {
-    environment.systemPackages = lib.concatMap (lang: lang.packages) langs;
+    environment.systemPackages = lib.concatMap (lang: lang.packages or [ ]) langs;
     environment.variables = lib.mergeAttrsList (map (lang: lang.env or { }) langs);
   };
 }

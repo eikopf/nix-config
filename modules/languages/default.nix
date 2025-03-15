@@ -1,3 +1,17 @@
+# programming language configurations
+
+# each element in this module is an attribute set with two fields:
+# - the `name` field is a string with the name of the language, and;
+# - the `cfgFn` field is a function which takes an attribute set and returns
+#   an attribute set.
+#
+# the input to each `cfgFn` is presumed to the be the `config` parameter passed
+# to host configuration modules, and the output has two optional fields:
+# - the `packages` field is a list of the elements of `pkgs`, and;
+# - the `env` field is an attribute set of strings defining environment variables.
+#
+# the processing of these language configurations is defined in ./selection.nix
+
 { pkgs, ... }:
 
 let
