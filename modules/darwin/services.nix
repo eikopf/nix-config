@@ -71,6 +71,7 @@
         right_padding = padding;
         window_gap = padding;
         window_placement = "second_child";
+        window_insertion_point = "focused";
       };
 
     extraConfig = lib.strings.concatLines [
