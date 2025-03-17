@@ -21,6 +21,8 @@
       curl
       neovim
       fish
+      hyperfine
+      just
     ])
   ];
 }
