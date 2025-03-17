@@ -1,4 +1,5 @@
 {
+  pkgs,
   lib,
   ...
 }:
@@ -17,6 +18,29 @@
       fish_greeting = {
         body = "";
       };
+    };
+  };
+
+  programs.ghostty = {
+    enable = true;
+    package = pkgs.emptyDirectory; # ghostty is installed via homebrew
+
+    settings = {
+      theme = "catppuccin-macchiato";
+      font-family = "Berkeley Mono";
+      mouse-hide-while-typing = true;
+
+      # gui
+      title = " ";
+      window-title-font-family = "Berkeley Mono";
+      window-theme = "dark";
+      window-padding-x = 5;
+      window-save-state = "always";
+
+      # macos
+      macos-titlebar-style = "hidden";
+      macos-titlebar-proxy-icon = "hidden";
+      macos-option-as-alt = true;
     };
   };
 
