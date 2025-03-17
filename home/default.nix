@@ -25,7 +25,14 @@
 
   programs.ghostty = {
     enable = true;
-    package = pkgs.emptyDirectory; # ghostty is installed via homebrew
+
+    # ghostty is installed and managed by homebrew on macos, so we need
+    # to give home-manager a fake ghostty package to keep it happy
+    package =
+      if pkgs.stdenv.isDarwin then
+        lib.addMetaAttrs { mainProgram = "ghostty"; } pkgs.emptyDirectory
+      else
+        pkgs.ghostty;
 
     settings = {
       theme = "catppuccin-macchiato";
