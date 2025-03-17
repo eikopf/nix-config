@@ -4,7 +4,18 @@
   ...
 }:
 {
+  # required by home-manager
   users.users.oliver.home = "/Users/oliver";
+
+  networking = {
+    computerName = "Pilatus";
+    hostName = "pilatus";
+  };
+
+  system.keyboard = {
+    enableKeyMapping = true;
+    remapCapsLockToControl = true;
+  };
 
   enabledLanguages = with languages; [
     chez

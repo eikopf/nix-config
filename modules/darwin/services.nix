@@ -7,6 +7,9 @@
 {
   services.nix-daemon.enable = true;
 
+  # karabiner elements
+  services.karabiner-elements.enable = true;
+
   # skhd
   services.skhd = {
     enable = true;

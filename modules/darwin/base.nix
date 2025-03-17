@@ -6,6 +6,7 @@
 }:
 {
   environment.systemPackages = with pkgs; [
+    karabiner-elements
     skhd
     yabai
   ];
