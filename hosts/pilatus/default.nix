@@ -17,6 +17,15 @@
     remapCapsLockToControl = true;
   };
 
+  homebrew = {
+    enable = true;
+    global.autoUpdate = false;
+
+    casks = [
+      "ghostty"
+    ];
+  };
+
   enabledLanguages = with languages; [
     chez
     haskell
