@@ -75,11 +75,18 @@ in
   });
 
   java = mkLang "java" (config: {
-    packages = with pkgs; [ zulu23 ];
+    packages = with pkgs; [
+      zulu23
+      jdt-language-server # jdtls
+    ];
   });
 
   javascript = mkLang "javascript" (config: {
-    packages = with pkgs; [ nodejs ];
+    packages = with pkgs; [
+      nodejs
+      typescript-language-server # ts_ls
+      prettierd
+    ];
   });
 
   lean = mkLang "lean" (config: {
@@ -88,6 +95,7 @@ in
 
   lua = mkLang "lua" (config: {
     packages = with pkgs; [
+      lua-language-server
       fennel-ls
       (luajit.withPackages (
         ps: with ps; [
