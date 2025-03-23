@@ -41,10 +41,6 @@
     rust
   ];
 
-  # disable nix-darwin daemon in favour of using
-  # the determinate-nix daemon
-  services.nix-daemon.enable = false;
-
   # nix-darwin trivia
   system.configurationRevision = self.rev or self.dirtyRev or null;
   system.stateVersion = 5;
