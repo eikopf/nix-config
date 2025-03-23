@@ -30,6 +30,5 @@
   environment.systemPackages = with pkgs; [
     devenv
     direnv
-    nixfmt-rfc-style
   ];
 }

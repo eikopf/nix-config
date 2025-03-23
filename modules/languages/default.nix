@@ -25,6 +25,12 @@ in
     env.AGDA_DIR = "${config.environment.variables.XDG_CONFIG_HOME}/agda";
   });
 
+  c = mkLang "c" (config: {
+    packages = with pkgs; [
+      clang-tools
+    ];
+  });
+
   chez = mkLang "chez" (config: {
     packages = with pkgs; [ chez ];
     env = {
@@ -34,7 +40,11 @@ in
   });
 
   clojure = mkLang "clojure" (config: {
-    packages = with pkgs; [ clojure ];
+    packages = with pkgs; [
+      clojure
+      cljfmt
+      clojure-lsp
+    ];
     env.CLJ_CONFIG = "${config.environment.variables.XDG_CONFIG_HOME}/clojure";
   });
 
@@ -88,6 +98,13 @@ in
     ];
   });
 
+  nix = mkLang "nix" (config: {
+    packages = with pkgs; [
+      nixd
+      nixfmt-rfc-style
+    ];
+  });
+
   ocaml = mkLang "ocaml" (config: {
     packages = with pkgs; [
       ocaml
@@ -99,7 +116,11 @@ in
   });
 
   python = mkLang "python" (config: {
-    packages = with pkgs; [ uv ];
+    packages = with pkgs; [
+      uv
+      ruff
+      ruff-lsp
+    ];
   });
 
   racket = mkLang "racket" (config: {
