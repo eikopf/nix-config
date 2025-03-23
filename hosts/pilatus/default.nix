@@ -40,6 +40,7 @@
   };
 
   enabledLanguages = with languages; [
+    c
     chez
     haskell
     idris2
@@ -48,6 +49,7 @@
     javascript
     lean
     lua
+    nix
     ocaml
     python
     racket
