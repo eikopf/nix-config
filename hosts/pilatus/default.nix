@@ -1,11 +1,20 @@
 {
   self,
+  pkgs,
   languages,
   ...
 }:
 {
-  # required by home-manager
-  users.users.oliver.home = "/Users/oliver";
+  users.knownUsers = [ "oliver" ];
+
+  users.users.oliver = {
+    # required by home-manager
+    home = "/Users/oliver";
+    shell = pkgs.fish;
+    # this is apparently the default uid for the primary user on macOS, but you
+    # can get the exact value by running `dscl . -read /Users/<user> UniqueID`
+    uid = 501;
+  };
 
   networking = {
     computerName = "Pilatus";
