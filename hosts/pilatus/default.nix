@@ -26,6 +26,10 @@
     remapCapsLockToControl = true;
   };
 
+  # define the installed nix package on this host; some tools like nixd rely
+  # on this setting being accurate to work correctly
+  nix.package = pkgs.lix;
+
   homebrew = {
     enable = true;
     global.autoUpdate = false;
