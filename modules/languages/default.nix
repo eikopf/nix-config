@@ -97,6 +97,7 @@ in
     packages = with pkgs; [
       lua-language-server
       fennel-ls
+      fnlfmt
       (luajit.withPackages (
         ps: with ps; [
           fennel
