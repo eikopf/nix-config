@@ -12,10 +12,6 @@
     enable = true;
 
     skhdConfig = lib.strings.concatLines [
-      # shortcuts to open ghostty and neovide
-      "cmd - return : open -a /Applications/Ghostty.app"
-      "cmd + shift - return : neovide"
-
       # move focus between windows in the current display
       "alt - h : yabai -m window --focus west"
       "alt - j : yabai -m window --focus south"
@@ -33,6 +29,30 @@
       "ctrl + alt - j : yabai -m window --warp south"
       "ctrl + alt - k : yabai -m window --warp north"
       "ctrl + alt - l : yabai -m window --warp east"
+
+      # move focus between spaces (requires disabling SIP)
+      "alt - 1 : yabai -m space --focus 1"
+      "alt - 2 : yabai -m space --focus 2"
+      "alt - 3 : yabai -m space --focus 3"
+      "alt - 4 : yabai -m space --focus 4"
+      "alt - 5 : yabai -m space --focus 5"
+      "alt - 6 : yabai -m space --focus 6"
+      "alt - 7 : yabai -m space --focus 7"
+      "alt - 8 : yabai -m space --focus 8"
+      "alt - 9 : yabai -m space --focus 9"
+      "alt - 0 : yabai -m space --focus 0"
+
+      # send focused window to a space
+      "shift + alt - 1 : yabai -m window --space 1"
+      "shift + alt - 2 : yabai -m window --space 2"
+      "shift + alt - 3 : yabai -m window --space 3"
+      "shift + alt - 4 : yabai -m window --space 4"
+      "shift + alt - 5 : yabai -m window --space 5"
+      "shift + alt - 6 : yabai -m window --space 6"
+      "shift + alt - 7 : yabai -m window --space 7"
+      "shift + alt - 8 : yabai -m window --space 8"
+      "shift + alt - 9 : yabai -m window --space 9"
+      "shift + alt - 0 : yabai -m window --space 0"
 
       # rotate tree
       "alt - r : yabai -m space --rotate 90"
