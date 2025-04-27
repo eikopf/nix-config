@@ -54,6 +54,7 @@
     python
     racket
     rust
+    typst
   ];
 
   # nix-darwin trivia
