@@ -139,4 +139,12 @@ in
   rust = mkLang "rust" (config: {
     packages = with pkgs; [ rustup ];
   });
+
+  typst = mkLang "typst" (config: {
+    packages = with pkgs; [
+      typst
+      typstyle
+      tinymist
+    ];
+  });
 }
