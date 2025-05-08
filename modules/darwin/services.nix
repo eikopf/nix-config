@@ -2,10 +2,17 @@
 
 {
   lib,
+  pkgs,
   ...
 }:
 {
   services.nix-daemon.enable = true;
+
+  # emacs
+  services.emacs = {
+    enable = true;
+    package = pkgs.emacs-macport;
+  };
 
   # skhd
   services.skhd = {
