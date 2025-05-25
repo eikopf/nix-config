@@ -10,7 +10,11 @@
     yabai
   ];
 
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
+
+  # this is apparently necessary for an ongoing migration, and will be
+  # removed at some later point
+  system.primaryUser = "oliver";
 
   system.defaults = {
     dock.autohide = true;

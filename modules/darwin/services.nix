@@ -5,8 +5,6 @@
   ...
 }:
 {
-  services.nix-daemon.enable = true;
-
   # skhd
   services.skhd = {
     enable = true;

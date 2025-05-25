@@ -128,7 +128,6 @@ in
     packages = with pkgs; [
       uv
       ruff
-      ruff-lsp
     ];
   });
 
