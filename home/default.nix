@@ -25,19 +25,15 @@
 
   programs.ghostty = {
     enable = true;
-
-    # ghostty is installed and managed by homebrew on macos, so we need
-    # to give home-manager a fake ghostty package to keep it happy
-    package =
-      if pkgs.stdenv.isDarwin then
-        lib.addMetaAttrs { mainProgram = "ghostty"; } pkgs.emptyDirectory
-      else
-        pkgs.ghostty;
+    package = null;
 
     settings = {
       theme = "catppuccin-macchiato";
       font-family = "Berkeley Mono";
       mouse-hide-while-typing = true;
+
+      # BUG: this seems not to work on macOS for some reason
+      cursor-style = "block";
 
       # gui
       title = " ";
