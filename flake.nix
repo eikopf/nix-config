@@ -9,6 +9,8 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+
     home-manager = {
       url = "github:nix-community/home-manager/release-25.05";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -20,6 +22,7 @@
       self,
       nixpkgs,
       darwin,
+      nix-homebrew,
       home-manager,
       ...
     }@inputs:
@@ -71,6 +74,7 @@
             ./modules/darwin
             ./modules/languages/selection.nix
             home-manager.darwinModules.home-manager
+            nix-homebrew.darwinModules.nix-homebrew
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
