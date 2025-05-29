@@ -95,6 +95,7 @@
     extraConfig = lib.strings.concatLines [
       # ignored apps
       "yabai -m rule --add app='^System Settings$' manage=off"
+      "yabai -m rule --add app='^Discord$' manage=off"
       "yabai -m rule --add app='^Music$' manage=off"
       "yabai -m rule --add app='^Archive Utility$' manage=off"
       "yabai -m rule --add app='^Raycast' manage=off"
