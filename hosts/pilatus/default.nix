@@ -1,6 +1,7 @@
 {
   self,
   pkgs,
+  config,
   languages,
   ...
 }:
@@ -36,8 +37,11 @@
 
     casks = [
       "ghostty" # terminal
-      "zen-browser" # browser
+      "zen" # browser
     ];
+
+    # https://git.aly.codes/alyraffauf/nixcfg/src/commit/6f122646a3ebaa2e34feb41952b38ecd1bf6019e/hosts/fortree/default.nix#L69
+    taps = builtins.attrNames config.nix-homebrew.taps;
   };
 
   enabledLanguages = with languages; [
