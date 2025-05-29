@@ -35,7 +35,8 @@
     global.autoUpdate = false;
 
     casks = [
-      "ghostty"
+      "ghostty" # terminal
+      "zen-browser" # browser
     ];
   };
 
