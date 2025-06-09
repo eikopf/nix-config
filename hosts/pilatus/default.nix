@@ -48,6 +48,7 @@
   enabledLanguages = with languages; [
     c
     chez
+    clojure
     haskell
     idris2
     janet
