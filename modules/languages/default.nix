@@ -39,6 +39,8 @@ in
     };
   });
 
+  # BUG: this causes infinite recursion when enabled, which i suspect has to do
+  # with the environment variable in some way
   clojure = mkLang "clojure" (config: {
     packages = with pkgs; [
       clojure
