@@ -45,6 +45,16 @@
     taps = builtins.attrNames config.nix-homebrew.taps;
   };
 
+  environment.systemPackages = with pkgs; [
+    # embedded ESP tooling
+    ccache # compiler cache for c/c++
+    cmake # c build system
+    dfu-util # device firmware update USB programmer
+    espup # ESP tooling manager
+    ldproxy # proxy linker
+    ninja # alternative c build system
+  ];
+
   enabledLanguages = with languages; [
     c
     chez
