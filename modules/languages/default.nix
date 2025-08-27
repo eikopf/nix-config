@@ -12,7 +12,7 @@
 #
 # the processing of these language configurations is defined in ./selection.nix
 
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   mkLang = name: cfgFn: {
@@ -139,11 +139,8 @@ in
 
   rust = mkLang "rust" (config: {
     packages = with pkgs; [
-      # NOTE: this ordering is loadbearing: pkgs.rustup includes a rust-analyzer
-      # binary, so we have to put rust-analyzer first to indicate that it should
-      # be preferred
-      rust-analyzer
-      rustup
+      (lib.setPrio 0 rust-analyzer)
+      (lib.setPrio 1 rustup)
     ];
   });
 
