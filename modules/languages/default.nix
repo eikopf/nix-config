@@ -138,7 +138,10 @@ in
   });
 
   rust = mkLang "rust" (config: {
-    packages = with pkgs; [ rustup ];
+    packages = with pkgs; [
+      rustup
+      rust-analyzer # a slightly smarter wrapper over rust-analyzer
+    ];
   });
 
   typst = mkLang "typst" (config: {
