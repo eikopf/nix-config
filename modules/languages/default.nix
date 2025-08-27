@@ -139,8 +139,11 @@ in
 
   rust = mkLang "rust" (config: {
     packages = with pkgs; [
+      # NOTE: this ordering is loadbearing: pkgs.rustup includes a rust-analyzer
+      # binary, so we have to put rust-analyzer first to indicate that it should
+      # be preferred
+      rust-analyzer
       rustup
-      rust-analyzer # a slightly smarter wrapper over rust-analyzer
     ];
   });
 
