@@ -137,10 +137,18 @@ in
     packages = with pkgs; [ racket-minimal ];
   });
 
+  # NOTE: some tools (for example, espup) assume that the rust-analyzer binary
+  # on the PATH is the independent one, but if they run into rustup's version then
+  # they'll crash. conversely, if the independent rust-analyzer package is too old
+  # relative to the current version of rustc, it will stop being able to handle
+  # macro expansions correctly. so deciding whether to include the independent
+  # rust-analyzer or not is a matter of deciding which of these crashes you would
+  # most like to avoid
+
   rust = mkLang "rust" (config: {
     packages = with pkgs; [
-      (lib.setPrio 0 rust-analyzer)
-      (lib.setPrio 1 rustup)
+      # (lib.setPrio 0 rust-analyzer)
+      rustup
     ];
   });
 
