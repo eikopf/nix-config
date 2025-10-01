@@ -64,6 +64,12 @@ in
     ];
   });
 
+  hledger = mkLang "hledger" (config: {
+    packages = with pkgs; [
+      hledger
+    ];
+  });
+
   idris2 = mkLang "idris2" (config: {
     packages = with pkgs; [
       idris2
