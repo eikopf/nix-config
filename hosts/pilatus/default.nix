@@ -59,6 +59,7 @@
     c
     chez
     haskell
+    hledger
     idris2
     janet
     java
