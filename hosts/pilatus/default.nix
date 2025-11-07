@@ -53,6 +53,9 @@
     espup # ESP tooling manager
     ldproxy # proxy linker
     ninja # alternative c build system
+
+    # macos utilities
+    monitorcontrol # external display controller
   ];
 
   enabledLanguages = with languages; [
