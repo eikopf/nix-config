@@ -112,7 +112,16 @@
         format = "[\\($symbol\\)]($style) ";
       };
 
+      # configured to only show venv information, and to only
+      # activate when a venv is currently activated
+      python = {
+        detect_extensions = [ ];
+        detect_files = [ ];
+        format = "[\\($virtualenv $version\\)]($style) ";
+      };
+
       format = lib.concatStrings [
+        "$python"
         "$direnv"
         "$username"
         "$hostname"
