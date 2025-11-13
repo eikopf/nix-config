@@ -29,6 +29,9 @@ in
     hyfetch
     jq
     jujutsu
+    man
+    man-pages
+    man-pages-posix
     pandoc
     ripgrep
     starship
