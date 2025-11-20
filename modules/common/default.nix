@@ -13,6 +13,7 @@
     # base packages installed by all hosts
     (with pkgs; [
       git
+      git-extras
       readline
       rlwrap
       tree
