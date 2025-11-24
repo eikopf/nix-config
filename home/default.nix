@@ -28,7 +28,7 @@
     package = null;
 
     settings = {
-      theme = "catppuccin-macchiato";
+      theme = "Alabaster";
       font-family = "Berkeley Mono";
       mouse-hide-while-typing = true;
 
