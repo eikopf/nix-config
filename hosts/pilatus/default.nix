@@ -72,7 +72,7 @@
     nix
     ocaml
     python
-    racket
+    # racket
     rust
     typst
   ];
