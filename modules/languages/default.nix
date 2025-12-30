@@ -84,7 +84,7 @@ in
 
   java = mkLang "java" (config: {
     packages = with pkgs; [
-      zulu23
+      zulu
       jdt-language-server # jdtls
     ];
   });
