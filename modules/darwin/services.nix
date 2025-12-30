@@ -5,9 +5,14 @@
   ...
 }:
 {
+  # aerospace
+  services.aerospace = {
+    enable = true;
+  };
+
   # skhd
   services.skhd = {
-    enable = true;
+    enable = false;
 
     skhdConfig = lib.strings.concatLines [
       # move focus between windows in the current display
@@ -69,7 +74,7 @@
 
   # yabai
   services.yabai = {
-    enable = true;
+    enable = false;
 
     config =
       let
