@@ -7,8 +7,6 @@
 {
   environment.systemPackages = with pkgs; [
     aerospace
-    skhd
-    yabai
   ];
 
   security.pam.services.sudo_local.touchIdAuth = true;
