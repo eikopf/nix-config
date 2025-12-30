@@ -71,11 +71,19 @@
 
   programs.git = {
     enable = true;
-    userName = "oliver";
-    userEmail = "oliver@wooding.dev";
+    settings = {
+      user = {
+        name = "oliver";
+        email = "oliver@wooding.dev";
+      };
 
-    delta.enable = true; # use delta as the git-diff pager
-    extraConfig.init.defaultBranch = "main"; # set the default branch name to main
+      init.defaultBranch = "main";
+    };
+  };
+
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
   };
 
   programs.direnv = {
