@@ -26,10 +26,10 @@
         alt-slash = "layout tiles horizontal vertical";
         alt-comma = "layout accordion horizontal vertical";
 
-        alt-h = "focus left";
-        alt-j = "focus down";
-        alt-k = "focus up";
-        alt-l = "focus right";
+        alt-h = "focus --boundaries all-monitors-outer-frame left";
+        alt-j = "focus --boundaries all-monitors-outer-frame down";
+        alt-k = "focus --boundaries all-monitors-outer-frame up";
+        alt-l = "focus --boundaries all-monitors-outer-frame right";
 
         alt-shift-h = "move left";
         alt-shift-j = "move down";
