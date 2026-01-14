@@ -1,16 +1,17 @@
 {
   self,
+  user,
   pkgs,
   config,
   languages,
   ...
 }:
 {
-  users.knownUsers = [ "oliver" ];
+  users.knownUsers = [ "${user}" ];
 
-  users.users.oliver = {
+  users.users.${user} = {
     # required by home-manager
-    home = "/Users/oliver";
+    home = "/Users/${user}";
     shell = pkgs.fish;
     # this is apparently the default uid for the primary user on macOS, but you
     # can get the exact value by running `dscl . -read /Users/<user> UniqueID`

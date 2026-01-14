@@ -31,11 +31,11 @@
       inherit (nixpkgs) lib;
 
       mkNixosHost =
-        name: system: extraModules:
+        user: name: system: extraModules:
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit inputs outputs;
+            inherit user inputs outputs;
             languages = import ./modules/languages {
               inherit lib;
               pkgs = import nixpkgs { inherit system; };
@@ -51,18 +51,23 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
-              home-manager.users.oliver = (import ./home);
+              home-manager.users.${user} = (import ./home);
             }
           ]
           ++ extraModules;
         };
 
       mkDarwinHost =
-        name: system: extraModules:
+        user: name: system: extraModules:
         darwin.lib.darwinSystem {
           inherit system;
           specialArgs = {
-            inherit self inputs outputs;
+            inherit
+              self
+              user
+              inputs
+              outputs
+              ;
             languages = import ./modules/languages {
               inherit lib;
               pkgs = import nixpkgs { inherit system; };
@@ -80,7 +85,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
-              home-manager.users.oliver = import ./home;
+              home-manager.users.${user} = import ./home;
             }
           ]
           ++ extraModules;
@@ -88,11 +93,11 @@
     in
     {
       nixosConfigurations = {
-        rigi = mkNixosHost "rigi" "x86_64-linux" [ ];
+        rigi = mkNixosHost "oliver" "rigi" "x86_64-linux" [ ];
       };
 
       darwinConfigurations = {
-        pilatus = mkDarwinHost "pilatus" "aarch64-darwin" [ ];
+        pilatus = mkDarwinHost "oliver" "pilatus" "aarch64-darwin" [ ];
       };
     };
 }
