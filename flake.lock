@@ -59,6 +59,38 @@
         "type": "github"
       }
     },
+    "homebrew-cask": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768377904,
+        "narHash": "sha256-e3iYl1dxSuNFaRpFCBEGROh5i9PRhZGxwqWZN47ejtU=",
+        "owner": "homebrew",
+        "repo": "homebrew-cask",
+        "rev": "e6ce2fb4e105e8736c8df83bd58aa1c79f1c7e13",
+        "type": "github"
+      },
+      "original": {
+        "owner": "homebrew",
+        "repo": "homebrew-cask",
+        "type": "github"
+      }
+    },
+    "homebrew-core": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1768386808,
+        "narHash": "sha256-S7qVgYRBlpELKfFHkDncKt91AFCtBIkbxPkaFe8OFDY=",
+        "owner": "homebrew",
+        "repo": "homebrew-core",
+        "rev": "862a97484600f5cd1c59679926b2379c4d4f35ae",
+        "type": "github"
+      },
+      "original": {
+        "owner": "homebrew",
+        "repo": "homebrew-core",
+        "type": "github"
+      }
+    },
     "nix-homebrew": {
       "inputs": {
         "brew-src": "brew-src"
@@ -97,6 +129,8 @@
       "inputs": {
         "darwin": "darwin",
         "home-manager": "home-manager",
+        "homebrew-cask": "homebrew-cask",
+        "homebrew-core": "homebrew-core",
         "nix-homebrew": "nix-homebrew",
         "nixpkgs": "nixpkgs"
       }

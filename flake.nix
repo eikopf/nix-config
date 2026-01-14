@@ -11,6 +11,16 @@
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
+    homebrew-core = {
+      url = "github:homebrew/homebrew-core";
+      flake = false;
+    };
+
+    homebrew-cask = {
+      url = "github:homebrew/homebrew-cask";
+      flake = false;
+    };
+
     home-manager = {
       url = "github:nix-community/home-manager/release-25.11";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -23,6 +33,8 @@
       nixpkgs,
       darwin,
       nix-homebrew,
+      homebrew-core,
+      homebrew-cask,
       home-manager,
       ...
     }@inputs:
@@ -86,7 +98,29 @@
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
               home-manager.users.${user} = import ./home;
+
+              nix-homebrew = {
+                inherit user;
+                enable = true;
+
+                # declare taps explicitly
+                taps = {
+                  "homebrew/homebrew-core" = homebrew-core;
+                  "homebrew/homebrew-cask" = homebrew-cask;
+                };
+
+                # disable imperatively added taps
+                mutableTaps = false;
+              };
             }
+
+            # set homebrew.taps to the declared nix-homebrew taps
+            (
+              { config, ... }:
+              {
+                homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
+              }
+            )
           ]
           ++ extraModules;
         };
