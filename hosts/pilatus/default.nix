@@ -36,6 +36,7 @@
     global.autoUpdate = false;
 
     casks = [
+      "claude-code" # coding agent
       "calibre" # ebook manager
       "ghostty" # terminal
       "zen" # browser
