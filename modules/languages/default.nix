@@ -115,6 +115,12 @@ in
     ];
   });
 
+  markdown = mkLang "markdown" (config: {
+    packages = with pkgs; [
+      marksman
+    ];
+  });
+
   nix = mkLang "nix" (config: {
     packages = with pkgs; [
       nixd
