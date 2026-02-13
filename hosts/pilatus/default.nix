@@ -67,6 +67,7 @@
     javascript
     lean
     lua
+    markdown
     nix
     ocaml
     python
