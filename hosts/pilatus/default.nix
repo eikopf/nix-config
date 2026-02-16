@@ -52,6 +52,8 @@
     ldproxy # proxy linker
     ninja # alternative c build system
 
+    gh # github CLI integration
+
     # macos utilities
     monitorcontrol # external display controller
   ];
