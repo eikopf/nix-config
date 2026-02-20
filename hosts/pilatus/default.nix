@@ -53,6 +53,7 @@
     ninja # alternative c build system
 
     gh # github CLI integration
+    tmux # terminal multiplexer
 
     # macos utilities
     monitorcontrol # external display controller
