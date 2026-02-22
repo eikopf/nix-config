@@ -54,6 +54,7 @@
 
     gh # github CLI integration
     tmux # terminal multiplexer
+    pnpm_9 # javascript package manager
 
     # macos utilities
     monitorcontrol # external display controller
