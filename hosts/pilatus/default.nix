@@ -37,7 +37,10 @@
     global.autoUpdate = false;
 
     casks = [
-      "claude-code" # coding agent
+      # coding agents
+      "claude-code"
+      "codex"
+
       "calibre" # ebook manager
       "ghostty" # terminal
     ];
