@@ -55,7 +55,10 @@
     ldproxy # proxy linker
     ninja # alternative c build system
 
+    # docker tooling
+    colima
     docker
+
     gh # github CLI integration
     tmux # terminal multiplexer
     pnpm # javascript package manager
