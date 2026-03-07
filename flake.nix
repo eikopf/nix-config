@@ -43,7 +43,12 @@
       inherit (nixpkgs) lib;
 
       mkNixosHost =
-        user: name: system: extraModules:
+        {
+          user,
+          name,
+          system,
+          extraModules,
+        }:
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
@@ -70,7 +75,12 @@
         };
 
       mkDarwinHost =
-        user: name: system: extraModules:
+        {
+          user,
+          name,
+          system,
+          extraModules,
+        }:
         darwin.lib.darwinSystem {
           inherit system;
           specialArgs = {
@@ -127,11 +137,21 @@
     in
     {
       nixosConfigurations = {
-        rigi = mkNixosHost "oliver" "rigi" "x86_64-linux" [ ];
+        rigi = mkNixosHost {
+          user = "oliver";
+          name = "rigi";
+          system = "x86_64-linux";
+          extraModules = [ ];
+        };
       };
 
       darwinConfigurations = {
-        pilatus = mkDarwinHost "oliver" "pilatus" "aarch64-darwin" [ ];
+        pilatus = mkDarwinHost {
+          user = "oliver";
+          name = "pilatus";
+          system = "aarch64-darwin";
+          extraModules = [ ];
+        };
       };
     };
 }
