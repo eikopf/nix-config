@@ -10,6 +10,9 @@
     enable = true;
 
     settings = {
+      # normalisation — disable flatten to get BSP-style 1/2 + 1/4 + 1/4 layout
+      enable-normalization-flatten-containers = false;
+
       # layout
       gaps = {
         outer.top = 8;
@@ -39,8 +42,8 @@
         ctrl-alt-shift-h = "move-node-to-monitor --focus-follows-window left";
         ctrl-alt-shift-l = "move-node-to-monitor --focus-follows-window right";
 
-        alt-minus = "resize smart -50";
-        alt-equal = "resize smart +50";
+        ctrl-minus = "resize smart -50";
+        ctrl-equal = "resize smart +50";
 
         alt-shift-semicolon = "mode service";
       };
