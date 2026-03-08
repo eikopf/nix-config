@@ -55,6 +55,8 @@
     ldproxy # proxy linker
     ninja # alternative c build system
 
+    qemu # emulator
+
     # docker tooling
     colima
     docker
