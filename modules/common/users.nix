@@ -1,15 +1,15 @@
 # user configuration for both NixOS and macOS hosts
 
-{ pkgs, lib, ... }:
+{ user, pkgs, lib, ... }:
 let
   isDarwin = pkgs.stdenv.isDarwin;
   isLinux = pkgs.stdenv.isLinux;
 in
 {
-  users.users.oliver =
+  users.users.${user} =
     {
       description = "Oliver Wooding";
-      home = if isDarwin then /Users/oliver else /home/oliver;
+      home = if isDarwin then /Users/${user} else /home/${user};
       shell = pkgs.fish;
 
     }

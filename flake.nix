@@ -42,6 +42,11 @@
       inherit (self) outputs;
       inherit (nixpkgs) lib;
 
+      mkLanguages = system: import ./modules/languages {
+        inherit lib;
+        pkgs = import nixpkgs { inherit system; };
+      };
+
       mkNixosHost =
         {
           user,
@@ -53,22 +58,21 @@
           inherit system;
           specialArgs = {
             inherit user inputs outputs;
-            languages = import ./modules/languages {
-              inherit lib;
-              pkgs = import nixpkgs { inherit system; };
-            };
+            languages = mkLanguages system;
           };
 
           modules = [
             ./hosts/${name}
             ./modules/common
+            ./modules/nixos
             ./modules/languages/selection.nix
             home-manager.nixosModules.home-manager
             {
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
-              home-manager.users.${user} = (import ./home);
+              home-manager.extraSpecialArgs = { inherit user; };
+              home-manager.users.${user} = import ./home;
             }
           ]
           ++ extraModules;
@@ -84,16 +88,8 @@
         darwin.lib.darwinSystem {
           inherit system;
           specialArgs = {
-            inherit
-              self
-              user
-              inputs
-              outputs
-              ;
-            languages = import ./modules/languages {
-              inherit lib;
-              pkgs = import nixpkgs { inherit system; };
-            };
+            inherit self user inputs outputs;
+            languages = mkLanguages system;
           };
 
           modules = [
@@ -107,6 +103,7 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.backupFileExtension = "backup";
+              home-manager.extraSpecialArgs = { inherit user; };
               home-manager.users.${user} = import ./home;
 
               nix-homebrew = {

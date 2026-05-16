@@ -1,193 +1,23 @@
+{ user, ... }:
 {
-  pkgs,
-  lib,
-  ...
-}:
-let
-  isDarwin = pkgs.stdenv.isDarwin;
-in
-{
-  home.username = "oliver";
+  imports = [
+    ./atuin.nix
+    ./delta.nix
+    ./direnv.nix
+    ./eza.nix
+    ./fish.nix
+    ./ghostty.nix
+    ./git.nix
+    ./hyfetch.nix
+    ./jujutsu.nix
+    ./kitty.nix
+    ./neovide.nix
+    ./neovim.nix
+    ./starship.nix
+    ./zoxide.nix
+  ];
 
+  home.username = user;
   home.stateVersion = "24.11";
   programs.home-manager.enable = true;
-
-  # TODO: these program configs should be broken up into separate files
-
-  programs.eza.enable = true;
-  programs.zoxide.enable = true;
-
-  programs.fish = {
-    enable = true;
-    functions = {
-      fish_greeting = {
-        body = "";
-      };
-    };
-  };
-
-  programs.ghostty = {
-    enable = true;
-    package = if isDarwin then null else pkgs.ghostty;
-
-    settings = {
-      theme = "Alabaster";
-      font-family = "Berkeley Mono";
-      mouse-hide-while-typing = true;
-
-      # BUG: this seems not to work on macOS for some reason
-      cursor-style = "block";
-
-      # gui
-      title = " ";
-      window-title-font-family = "Berkeley Mono";
-      window-theme = "dark";
-      window-padding-x = 5;
-      window-save-state = "always";
-
-      # macos
-      macos-titlebar-style = "hidden";
-      macos-titlebar-proxy-icon = "hidden";
-      macos-option-as-alt = true;
-    };
-  };
-
-  programs.atuin = {
-    enable = true;
-
-    enableBashIntegration = true;
-    enableZshIntegration = true;
-    enableFishIntegration = true;
-  };
-
-  programs.jujutsu = {
-    enable = true;
-    settings = {
-      ui.editor = "nvim";
-
-      user = {
-        name = "oliver";
-        email = "oliver@wooding.dev";
-      };
-    };
-  };
-
-  programs.git = {
-    enable = true;
-    settings = {
-      user = {
-        name = "oliver";
-        email = "oliver@wooding.dev";
-      };
-
-      init.defaultBranch = "main";
-    };
-  };
-
-  programs.delta = {
-    enable = true;
-    enableGitIntegration = true;
-  };
-
-  programs.direnv = {
-    enable = true;
-
-    # fish integration is enabled by default because it's set as the login shell
-    enableBashIntegration = true;
-  };
-
-  programs.kitty = {
-    enable = true;
-    settings = {
-      scrollback_lines = 10000;
-      enable_audio_bell = false;
-      update_check_interval = 0;
-    };
-  };
-
-  programs.starship = {
-    enable = true;
-    settings = {
-      character.success_symbol = "λ";
-      character.error_symbol = "λ";
-
-      hostname.ssh_only = false;
-      username = {
-        show_always = true;
-        format = "[$user]($style)@";
-      };
-
-      direnv = {
-        disabled = false;
-        symbol = "direnv";
-        format = "[\\($symbol\\)]($style) ";
-      };
-
-      # configured to only show venv information, and to only
-      # activate when a venv is currently activated
-      python = {
-        detect_extensions = [ ];
-        detect_files = [ ];
-        format = "[\\($virtualenv $version\\)]($style) ";
-      };
-
-      format = lib.concatStrings [
-        "$python"
-        "$direnv"
-        "$username"
-        "$hostname"
-        "$directory"
-        "$git_branch"
-        "$git_commit"
-        "$git_state"
-        "$git_metrics"
-        "$git_status"
-        "$sudo"
-        "$cmd_duration"
-        "$line_break"
-        "$jobs"
-        "$time"
-        "$status"
-        "$shell"
-        "$character"
-      ];
-    };
-  };
-
-  programs.hyfetch = {
-    enable = true;
-
-    settings = {
-      preset = "bisexual";
-      mode = "rgb";
-      light_dark = "dark";
-      lightness = 0.7;
-      color_align = {
-        mode = "horizontal";
-        custom_colors = [ ];
-        fore_back = null;
-      };
-      backend = "neofetch";
-      args = null;
-      distro = null;
-      pride_month_shown = [ ];
-      pride_month_disable = false;
-    };
-  };
-
-  programs.neovide = {
-    enable = true;
-    settings = {
-      frame = "transparent";
-      font = {
-        normal = "BerkeleyMono Nerd Font";
-        size = 15.0;
-      };
-    };
-  };
-
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-  };
 }

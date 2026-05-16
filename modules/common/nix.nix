@@ -1,6 +1,7 @@
 # common nix configuration
 
 {
+  user,
   pkgs,
   ...
 }:
@@ -23,7 +24,7 @@
   # set trusted users
   nix.settings.trusted-users = [
     "root"
-    "oliver"
+    user
   ];
 
   # nix utilities

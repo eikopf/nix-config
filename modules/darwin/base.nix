@@ -1,6 +1,7 @@
 # basic configuration for all macOS hosts
 
 {
+  user,
   pkgs,
   ...
 }:
@@ -13,7 +14,7 @@
 
   # this is apparently necessary for an ongoing migration, and will be
   # removed at some later point
-  system.primaryUser = "oliver";
+  system.primaryUser = user;
 
   system.defaults = {
     dock.autohide = true;

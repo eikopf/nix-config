@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }@inputs:
+{ pkgs, ... }:
 {
   imports = [
     ./nix.nix
@@ -6,24 +6,19 @@
     ./users.nix
   ];
 
-  environment.systemPackages = lib.mkMerge [
-    (import ./nix.nix inputs).environment.systemPackages
-    (import ./shell.nix inputs).environment.systemPackages
-
-    # base packages installed by all hosts
-    (with pkgs; [
-      git
-      git-extras
-      readline
-      rlwrap
-      tree
-      vim
-      wget
-      curl
-      neovim
-      fish
-      hyperfine
-      just
-    ])
+  # base packages installed by all hosts
+  environment.systemPackages = with pkgs; [
+    git
+    git-extras
+    readline
+    rlwrap
+    tree
+    vim
+    wget
+    curl
+    neovim
+    fish
+    hyperfine
+    just
   ];
 }
