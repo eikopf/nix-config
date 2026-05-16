@@ -3,6 +3,9 @@
   lib,
   ...
 }:
+let
+  isDarwin = pkgs.stdenv.isDarwin;
+in
 {
   home.username = "oliver";
 
@@ -25,7 +28,7 @@
 
   programs.ghostty = {
     enable = true;
-    package = null;
+    package = if isDarwin then null else pkgs.ghostty;
 
     settings = {
       theme = "Alabaster";

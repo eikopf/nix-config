@@ -1,9 +1,7 @@
-# NOTE: this host is still probably broken, but can't be checked without an
-# available nixos machine
-
 {
   config,
   pkgs,
+  languages,
   ...
 }:
 {
@@ -16,7 +14,7 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   # networking
-  networking.hostName = "rigi";
+  networking.hostName = "wildspitz";
   networking.networkmanager.enable = true;
 
   # locale
@@ -34,14 +32,11 @@
     LC_TIME = "en_GB.UTF-8";
   };
 
-  # X11
-  services.xserver.enable = true;
-  services.xserver.xkb.layout = "us";
-  services.xserver.xkb.variant = "mac";
-
-  # Plasma 6
-  services.displayManager.sddm.enable = true;
-  services.desktopManager.plasma6.enable = true;
+  # Sway (Wayland compositor)
+  programs.sway = {
+    enable = true;
+    wrapperFeatures.gtk = true;
+  };
 
   # audio
   services.pulseaudio.enable = false;
@@ -55,14 +50,6 @@
 
   # graphics
   hardware.graphics.enable = true;
-  services.xserver.videoDrivers = [ "nvidia" ];
-  hardware.nvidia = {
-    modesetting.enable = true;
-    powerManagement.enable = true;
-    nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.stable;
-    open = true;
-  };
 
   # install firefox
   programs.firefox.enable = true;
@@ -70,6 +57,22 @@
   # allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
+  environment.systemPackages = with pkgs; [
+    # Sway essentials
+    swaylock
+    swayidle
+    foot # Wayland-native terminal
+    wmenu # Wayland-native dmenu replacement
+    mako # notification daemon
+    grim # screenshot
+    slurp # region selection
+    wl-clipboard
+  ];
+
+  enabledLanguages = with languages; [
+    nix
+  ];
+
   # minimum nix compat version
-  system.stateVersion = "24.11";
+  system.stateVersion = "25.11";
 }

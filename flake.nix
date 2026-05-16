@@ -143,6 +143,13 @@
           system = "x86_64-linux";
           extraModules = [ ];
         };
+
+        wildspitz = mkNixosHost {
+          user = "oliver";
+          name = "wildspitz";
+          system = "x86_64-linux";
+          extraModules = [ ];
+        };
       };
 
       darwinConfigurations = {
