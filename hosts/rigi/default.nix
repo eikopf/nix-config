@@ -11,13 +11,8 @@
     ./hardware-configuration.nix
   ];
 
-  # bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
   # networking
   networking.hostName = "rigi";
-  networking.networkmanager.enable = true;
 
   # X11
   services.xserver.enable = true;
@@ -27,16 +22,6 @@
   # Plasma 6
   services.displayManager.sddm.enable = true;
   services.desktopManager.plasma6.enable = true;
-
-  # audio
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
   # graphics
   hardware.graphics.enable = true;
@@ -51,9 +36,6 @@
 
   # install firefox
   programs.firefox.enable = true;
-
-  # allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   # minimum nix compat version
   system.stateVersion = "24.11";

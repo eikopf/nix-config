@@ -1,23 +1,10 @@
 {
-  self,
   user,
   pkgs,
-  config,
   languages,
   ...
 }:
 {
-  users.knownUsers = [ "${user}" ];
-
-  users.users.${user} = {
-    # required by home-manager
-    home = "/Users/${user}";
-    shell = pkgs.fish;
-    # this is apparently the default uid for the primary user on macOS, but you
-    # can get the exact value by running `dscl . -read /Users/<user> UniqueID`
-    uid = 501;
-  };
-
   networking = {
     computerName = "Pilatus";
     hostName = "pilatus";
@@ -89,8 +76,6 @@
     typst
   ];
 
-  # nix-darwin trivia
-  system.configurationRevision = self.rev or self.dirtyRev or null;
   system.stateVersion = 5;
   nixpkgs.hostPlatform = "aarch64-darwin";
 }

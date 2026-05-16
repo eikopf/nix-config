@@ -9,13 +9,8 @@
     ./hardware-configuration.nix
   ];
 
-  # bootloader
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-
   # networking
   networking.hostName = "wildspitz";
-  networking.networkmanager.enable = true;
 
   # Sway (Wayland compositor)
   programs.sway = {
@@ -23,24 +18,11 @@
     wrapperFeatures.gtk = true;
   };
 
-  # audio
-  services.pulseaudio.enable = false;
-  security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
-
   # graphics
   hardware.graphics.enable = true;
 
   # install firefox
   programs.firefox.enable = true;
-
-  # allow unfree packages
-  nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
     # Sway essentials

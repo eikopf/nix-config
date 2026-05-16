@@ -47,6 +47,14 @@
         pkgs = import nixpkgs { inherit system; };
       };
 
+      mkHomeManagerModule = user: {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.backupFileExtension = "backup";
+        home-manager.extraSpecialArgs = { inherit user; };
+        home-manager.users.${user} = import ./home;
+      };
+
       mkNixosHost =
         {
           user,
@@ -67,13 +75,7 @@
             ./modules/nixos
             ./modules/languages/selection.nix
             home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup";
-              home-manager.extraSpecialArgs = { inherit user; };
-              home-manager.users.${user} = import ./home;
-            }
+            (mkHomeManagerModule user)
           ]
           ++ extraModules;
         };
@@ -99,13 +101,7 @@
             ./modules/languages/selection.nix
             home-manager.darwinModules.home-manager
             nix-homebrew.darwinModules.nix-homebrew
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.backupFileExtension = "backup";
-              home-manager.extraSpecialArgs = { inherit user; };
-              home-manager.users.${user} = import ./home;
-
+            (mkHomeManagerModule user // {
               nix-homebrew = {
                 inherit user;
                 enable = true;
@@ -119,7 +115,7 @@
                 # disable imperatively added taps
                 mutableTaps = false;
               };
-            }
+            })
 
             # set homebrew.taps to the declared nix-homebrew taps
             (
