@@ -9,6 +9,10 @@
     ./hardware-configuration.nix
   ];
 
+  # boot
+  boot.loader.systemd-boot.enable = true;
+  boot.loader.efi.canTouchEfiVariables = true;
+
   # networking
   networking.hostName = "wildspitz";
 
