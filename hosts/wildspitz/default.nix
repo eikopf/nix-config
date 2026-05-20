@@ -25,6 +25,17 @@ in
   # graphics
   hardware.graphics.enable = true;
 
+  # login manager
+  services.greetd = {
+    enable = true;
+    settings = {
+      default_session = {
+        command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd sway";
+        user = "greeter";
+      };
+    };
+  };
+
   # install firefox
   programs.firefox.enable = true;
 
