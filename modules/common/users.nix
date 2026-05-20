@@ -11,10 +11,8 @@ in
       description = "Oliver Wooding";
       home = if isDarwin then /Users/${user} else /home/${user};
       shell = pkgs.fish;
-
     }
-    # these keys only exist on linux hosts
-    // lib.mkIf isLinux {
+    // lib.optionalAttrs isLinux {
       extraGroups = [
         "wheel"
         "networkmanager"
