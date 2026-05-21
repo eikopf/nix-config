@@ -304,15 +304,23 @@ in
           border: none;
           border-radius: 0;
           min-height: 0;
+          margin: 0;
+          padding: 0;
         }
 
         window#waybar {
           background-color: #f5f5f5;
           color: #303030;
-          /* padding on the window is the only approach confirmed to apply
-             symmetrically to both edges; structural/module selectors have
-             not produced consistent results. value = outer + inner gap = ${toString edgeGap}px. */
-          padding: 0 ${toString edgeGap}px;
+        }
+
+        /* Left outer spacing: #workspaces confirmed to produce visible margin */
+        #workspaces {
+          margin-left: ${toString edgeGap}px;
+        }
+
+        /* Right outer spacing: .modules-right padding-right confirmed to affect right edge */
+        .modules-right {
+          padding-right: ${toString edgeGap}px;
         }
 
         /* Inter-module spacing on the right */
