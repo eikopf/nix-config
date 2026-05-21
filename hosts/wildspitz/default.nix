@@ -7,6 +7,7 @@
 }:
 let
   modifier = "Mod4";
+  gaps = { inner = 10; outer = 5; };
 in
 {
   imports = [
@@ -81,8 +82,7 @@ in
         };
 
         gaps = {
-          inner = 10;
-          outer = 5;
+          inherit (gaps) inner outer;
         };
 
         window = {
@@ -267,6 +267,7 @@ in
         {
           layer = "top";
           position = "top";
+          height = 28;
           modules-left = [ "sway/workspaces" ];
           modules-right = [ "memory" "clock#date" "clock#time" ];
 
@@ -306,11 +307,11 @@ in
         }
 
         .modules-left {
-          padding-left: 24px;
+          padding-left: ${toString gaps.outer}px;
         }
 
         .modules-right {
-          padding-right: 24px;
+          padding-right: ${toString gaps.outer}px;
         }
 
         #workspaces button {
