@@ -95,10 +95,12 @@ in
 
         window = {
           border = 2;
+          titlebar = false;
         };
 
         floating = {
           border = 2;
+          titlebar = false;
           modifier = modifier;
         };
 
@@ -241,6 +243,7 @@ in
         bars = [
           {
             position = "top";
+            mode = "hide";
             fonts = {
               names = [ "Berkeley Mono" ];
               style = "Medium";
