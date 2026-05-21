@@ -9,7 +9,7 @@ in
   users.users.${user} =
     {
       description = "Oliver Wooding";
-      home = if isDarwin then /Users/${user} else /home/${user};
+      home = if isDarwin then "/Users/${user}" else "/home/${user}";
       shell = pkgs.fish;
     }
     // lib.optionalAttrs isLinux {
