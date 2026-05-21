@@ -243,7 +243,6 @@ in
             };
             statusCommand = "i3status";
             trayOutput = "none";
-            extraConfig = "padding 0 24";
             colors = {
               background = "#f5f5f5";
               statusline = "#303030";
