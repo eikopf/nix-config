@@ -49,7 +49,7 @@ in
     swaylock
     swayidle
     foot
-    wofi
+    rofi
     mako
     grim
     slurp
@@ -64,7 +64,7 @@ in
       config = {
         inherit modifier;
         terminal = "ghostty";
-        menu = "wofi --show run";
+        menu = "rofi -show drun";
 
         fonts = {
           names = [ "Berkeley Mono" ];
@@ -136,7 +136,7 @@ in
         keybindings = {
           # terminal and launcher
           "${modifier}+Return" = "exec ghostty";
-          "${modifier}+space" = "exec wofi --show run";
+          "${modifier}+space" = "exec rofi -show drun";
           "${modifier}+Shift+q" = "kill";
 
           # focus (vim-style)
