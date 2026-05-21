@@ -7,5 +7,8 @@
 
   networking.networkmanager.enable = true;
 
+  # allow regular users to mount removable drives
+  services.udisks2.enable = true;
+
   nixpkgs.config.allowUnfree = true;
 }

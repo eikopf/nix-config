@@ -36,6 +36,14 @@ in
     };
   };
 
+  # Berkeley Mono (commercial font, stored locally)
+  fonts.packages = [
+    (pkgs.runCommand "berkeley-mono" { } ''
+      mkdir -p $out/share/fonts/truetype
+      cp ${../../fonts/berkeley-mono}/*.ttf $out/share/fonts/truetype/
+    '')
+  ];
+
   # install firefox
   programs.firefox.enable = true;
 
@@ -68,7 +76,10 @@ in
         };
 
         output = {
-          "DP-1" = { scale = "1.5"; };
+          "DP-1" = {
+            scale = "1.5";
+            bg = "${../../wallpaper/gris.jpg} fill";
+          };
         };
 
         input = {
