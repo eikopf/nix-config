@@ -272,6 +272,7 @@ in
           layer = "top";
           position = "top";
           height = 28;
+          spacing = 0;
           modules-left = [ "sway/workspaces" ];
           modules-right = [ "memory" "clock#date" "clock#time" ];
 
@@ -308,19 +309,14 @@ in
         window#waybar {
           background-color: #f5f5f5;
           color: #303030;
-        }
-
-        /* Outer spacing: align with sway outer gap using structural selectors,
-           so we don't have to guess at module widget names. */
-        .modules-left > widget:first-child {
-          margin-left: ${toString edgeGap}px;
-        }
-        .modules-right > widget:last-child {
-          margin-right: ${toString edgeGap}px;
+          /* padding on the window is the only approach confirmed to apply
+             symmetrically to both edges; structural/module selectors have
+             not produced consistent results. value = outer + inner gap = ${toString edgeGap}px. */
+          padding: 0 ${toString edgeGap}px;
         }
 
         /* Inter-module spacing on the right */
-        .modules-right > widget + widget {
+        .modules-right label {
           margin-left: 15px;
         }
 
