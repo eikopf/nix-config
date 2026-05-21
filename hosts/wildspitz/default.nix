@@ -52,7 +52,7 @@ in
     swaylock
     swayidle
     foot
-    wmenu
+    wofi
     mako
     grim
     slurp
@@ -67,7 +67,7 @@ in
       config = {
         inherit modifier;
         terminal = "ghostty";
-        menu = "wmenu-run";
+        menu = "wofi --show run";
 
         fonts = {
           names = [ "Berkeley Mono" ];
@@ -138,7 +138,7 @@ in
         keybindings = {
           # terminal and launcher
           "${modifier}+Return" = "exec ghostty";
-          "${modifier}+space" = "exec wmenu-run";
+          "${modifier}+space" = "exec wofi --show run";
           "${modifier}+Shift+q" = "kill";
 
           # focus (vim-style)
@@ -248,6 +248,7 @@ in
             };
             statusCommand = "i3status";
             trayOutput = "none";
+            extraConfig = "padding 0 24";
             colors = {
               background = "#f5f5f5";
               statusline = "#303030";
