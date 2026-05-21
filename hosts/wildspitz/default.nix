@@ -49,7 +49,7 @@ in
     grim
     slurp
     wl-clipboard
-    i3status
+    waybar
   ];
 
   # Sway config (via home-manager)
@@ -206,7 +206,7 @@ in
           # sway management
           "${modifier}+Shift+c" = "reload";
           "${modifier}+Shift+e" = "exec swaynag -t warning -m 'Exit Sway?' -B 'Yes' 'swaymsg exit'";
-          "${modifier}+Shift+b" = "bar mode toggle";
+          "${modifier}+Shift+b" = "exec pkill -SIGUSR1 waybar";
           "${modifier}+r" = "mode resize";
         };
 
@@ -232,43 +232,10 @@ in
           };
         };
 
-        bars = [
-          {
-            position = "top";
-            mode = "hide";
-            fonts = {
-              names = [ "Berkeley Mono" ];
-              style = "Medium";
-              size = 10.0;
-            };
-            statusCommand = "i3status";
-            trayOutput = "none";
-            colors = {
-              background = "#f5f5f5";
-              statusline = "#303030";
-              separator = "#cecece";
-              focusedWorkspace = {
-                border = "#585858";
-                background = "#585858";
-                text = "#ffffff";
-              };
-              activeWorkspace = {
-                border = "#f5f5f5";
-                background = "#f5f5f5";
-                text = "#585858";
-              };
-              inactiveWorkspace = {
-                border = "#f5f5f5";
-                background = "#f5f5f5";
-                text = "#585858";
-              };
-              urgentWorkspace = {
-                border = "#cecece";
-                background = "#cecece";
-                text = "#303030";
-              };
-            };
-          }
+        bars = [];
+
+        startup = [
+          { command = "waybar"; }
         ];
       };
     };
@@ -283,42 +250,75 @@ in
 
     gtk.enable = true;
 
-    # i3status config
-    xdg.configFile."i3status/config".text = ''
-      general {
-        output_format = "i3bar"
-        colors = false
-        interval = 5
-        markup = "pango"
-      }
+    # waybar
+    programs.waybar = {
+      enable = true;
+      settings = [
+        {
+          layer = "top";
+          position = "top";
+          modules-left = [ "sway/workspaces" ];
+          modules-right = [ "memory" "clock#date" "clock#time" ];
 
-      order += "memory"
-      order += "tztime date"
-      order += "tztime time"
+          "sway/workspaces" = {
+            disable-scroll = true;
+          };
 
-      memory {
-        format = "<b>MEM</b> %percentage_used"
-        decimals = 0
-        align = "left"
-        separator = false
-        separator_block_width = 30
-      }
+          memory = {
+            format = "<b>MEM</b> {}%";
+            interval = 5;
+          };
 
-      tztime date {
-        format = "<b>DATE</b> %Y-%m-%d"
-        min_width = "DATE 0000-00-00"
-        align = "left"
-        separator = false
-        separator_block_width = 30
-      }
+          "clock#date" = {
+            format = "<b>DATE</b> {:%Y-%m-%d}";
+            interval = 60;
+          };
 
-      tztime time {
-        format = "<b>TIME</b> %H:%M %Z"
-        align = "left"
-        separator = false
-        separator_block_width = 0
-      }
-    '';
+          "clock#time" = {
+            format = "<b>TIME</b> {:%H:%M %Z}";
+            interval = 5;
+          };
+        }
+      ];
+      style = ''
+        * {
+          font-family: Berkeley Mono;
+          font-weight: 500;
+          font-size: 10pt;
+          border: none;
+          border-radius: 0;
+          min-height: 0;
+        }
+
+        window#waybar {
+          background-color: #f5f5f5;
+          color: #303030;
+          padding: 0 24px;
+        }
+
+        #workspaces button {
+          padding: 0 8px;
+          color: #585858;
+          background-color: #f5f5f5;
+        }
+
+        #workspaces button.focused {
+          color: #ffffff;
+          background-color: #585858;
+        }
+
+        #workspaces button.urgent {
+          color: #303030;
+          background-color: #cecece;
+        }
+
+        #memory,
+        #clock {
+          padding: 0 15px;
+          color: #303030;
+        }
+      '';
+    };
   };
 
   enabledLanguages = with languages; [
