@@ -247,7 +247,20 @@ in
     gtk.enable = true;
 
     # waybar (run as a systemd user service so it starts/restarts on rebuild)
-    services.waybar.enable = true;
+    systemd.user.services.waybar = {
+      Unit = {
+        Description = "Waybar";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        ExecStart = "${pkgs.waybar}/bin/waybar";
+        Restart = "on-failure";
+      };
+      Install = {
+        WantedBy = [ "graphical-session.target" ];
+      };
+    };
     programs.waybar = {
       enable = true;
       settings = [
