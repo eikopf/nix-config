@@ -306,16 +306,12 @@ in
           color: #303030;
         }
 
-        .modules-left {
-          padding-left: ${toString gaps.outer}px;
-        }
-
-        .modules-right {
-          padding-right: ${toString gaps.outer}px;
+        #workspaces {
+          margin-left: ${toString gaps.outer}px;
         }
 
         #workspaces button {
-          padding: 0 8px;
+          padding: 0 6px;
           color: #585858;
           background-color: #f5f5f5;
         }
@@ -330,9 +326,19 @@ in
           background-color: #cecece;
         }
 
-        #memory,
-        #clock {
-          padding: 0 15px;
+        #memory {
+          margin-left: 15px;
+          color: #303030;
+        }
+
+        #date {
+          margin-left: 15px;
+          color: #303030;
+        }
+
+        #time {
+          margin-left: 15px;
+          margin-right: ${toString gaps.outer}px;
           color: #303030;
         }
       '';
