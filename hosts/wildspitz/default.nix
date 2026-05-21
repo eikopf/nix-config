@@ -58,7 +58,7 @@ in
       enable = true;
       config = {
         inherit modifier;
-        terminal = "foot";
+        terminal = "ghostty";
         menu = "wmenu-run";
 
         fonts = {
@@ -126,7 +126,7 @@ in
 
         keybindings = {
           # terminal and launcher
-          "${modifier}+Return" = "exec foot";
+          "${modifier}+Return" = "exec ghostty";
           "${modifier}+space" = "exec wmenu-run";
           "${modifier}+Shift+q" = "kill";
 
@@ -221,6 +221,12 @@ in
           };
         };
 
+        seat = {
+          "*" = {
+            xcursor_theme = "Adwaita 24";
+          };
+        };
+
         bars = [
           {
             position = "top";
@@ -260,6 +266,16 @@ in
         ];
       };
     };
+
+    # cursor and GTK settings
+    home.pointerCursor = {
+      gtk.enable = true;
+      name = "Adwaita";
+      package = pkgs.adwaita-icon-theme;
+      size = 24;
+    };
+
+    gtk.enable = true;
 
     # i3status config
     xdg.configFile."i3status/config".text = ''
