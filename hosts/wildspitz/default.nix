@@ -8,6 +8,10 @@
 let
   modifier = "Mod4";
   gaps = { inner = 10; outer = 5; };
+  # Sway places windows at (outer + inner) px from the screen edge,
+  # because the inner gap applies to outer edges too. Verified empirically:
+  # windows sit at x=15 with outer=5 and inner=10.
+  edgeGap = gaps.outer + gaps.inner;
 in
 {
   imports = [
@@ -309,10 +313,10 @@ in
         /* Outer spacing: align with sway outer gap using structural selectors,
            so we don't have to guess at module widget names. */
         .modules-left > widget:first-child {
-          margin-left: ${toString gaps.outer}px;
+          margin-left: ${toString edgeGap}px;
         }
         .modules-right > widget:last-child {
-          margin-right: ${toString gaps.outer}px;
+          margin-right: ${toString edgeGap}px;
         }
 
         /* Inter-module spacing on the right */
