@@ -206,7 +206,7 @@ in
           # sway management
           "${modifier}+Shift+c" = "reload";
           "${modifier}+Shift+e" = "exec swaynag -t warning -m 'Exit Sway?' -B 'Yes' 'swaymsg exit'";
-          "${modifier}+Shift+b" = "exec pkill -SIGUSR1 waybar";
+          "${modifier}+Shift+b" = "exec systemctl --user is-active --quiet waybar && systemctl --user stop waybar || systemctl --user start waybar";
           "${modifier}+r" = "mode resize";
         };
 
@@ -303,7 +303,14 @@ in
         window#waybar {
           background-color: #f5f5f5;
           color: #303030;
-          padding: 0 24px;
+        }
+
+        .modules-left {
+          padding-left: 24px;
+        }
+
+        .modules-right {
+          padding-right: 24px;
         }
 
         #workspaces button {
