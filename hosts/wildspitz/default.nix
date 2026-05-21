@@ -306,14 +306,24 @@ in
           color: #303030;
         }
 
-        #workspaces {
+        /* Outer spacing: align with sway outer gap using structural selectors,
+           so we don't have to guess at module widget names. */
+        .modules-left > widget:first-child {
           margin-left: ${toString gaps.outer}px;
+        }
+        .modules-right > widget:last-child {
+          margin-right: ${toString gaps.outer}px;
+        }
+
+        /* Inter-module spacing on the right */
+        .modules-right > widget + widget {
+          margin-left: 15px;
         }
 
         #workspaces button {
           padding: 0 6px;
           color: #585858;
-          background-color: #f5f5f5;
+          background-color: transparent;
         }
 
         #workspaces button.focused {
@@ -324,22 +334,6 @@ in
         #workspaces button.urgent {
           color: #303030;
           background-color: #cecece;
-        }
-
-        #memory {
-          margin-left: 15px;
-          color: #303030;
-        }
-
-        #date {
-          margin-left: 15px;
-          color: #303030;
-        }
-
-        #time {
-          margin-left: 15px;
-          margin-right: ${toString gaps.outer}px;
-          color: #303030;
         }
       '';
     };
