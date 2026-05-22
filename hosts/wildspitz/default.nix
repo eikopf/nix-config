@@ -269,7 +269,7 @@ in
     # rofi launcher
     programs.rofi = {
       enable = true;
-      extraConfig.theme = "alabaster";
+      theme = "alabaster";
     };
 
     xdg.dataFile."rofi/themes/alabaster.rasi".text = ''
