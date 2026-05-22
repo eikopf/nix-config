@@ -269,7 +269,7 @@ in
     # rofi launcher
     programs.rofi = {
       enable = true;
-      theme = pkgs.writeText "alabaster.rasi" ''
+      theme = ''
         * {
             background-color: #f5f5f5;
             text-color:       #303030;
