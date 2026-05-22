@@ -12,6 +12,7 @@ in
       font-family = "Berkeley Mono";
       mouse-hide-while-typing = true;
       app-notifications = "no-clipboard-copy";
+      progress-style = false;
 
       # BUG: this seems not to work on macOS for some reason
       cursor-style = "block";
