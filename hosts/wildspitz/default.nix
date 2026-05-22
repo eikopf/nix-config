@@ -50,7 +50,6 @@ in
     swayidle
     foot
     rofi
-    mako
     grim
     slurp
     wl-clipboard
@@ -237,6 +236,10 @@ in
         };
 
         bars = [];
+
+        startup = [
+          { command = "swaymsg workspace number 1"; }
+        ];
       };
     };
 
@@ -249,6 +252,20 @@ in
     };
 
     gtk.enable = true;
+
+    # mako notification daemon
+    services.mako = {
+      enable = true;
+      settings = {
+        font = "Berkeley Mono 10";
+        background-color = "#f5f5f5";
+        text-color = "#303030";
+        border-color = "#585858";
+        border-size = 2;
+        border-radius = 0;
+        default-timeout = 5000;
+      };
+    };
 
     # waybar (run as a systemd user service so it starts/restarts on rebuild)
     systemd.user.services.waybar = {

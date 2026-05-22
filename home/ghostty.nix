@@ -11,6 +11,7 @@ in
       theme = "Alabaster";
       font-family = "Berkeley Mono";
       mouse-hide-while-typing = true;
+      app-notifications = "no-clipboard-copy";
 
       # BUG: this seems not to work on macOS for some reason
       cursor-style = "block";
@@ -18,7 +19,7 @@ in
       # gui
       title = " ";
       window-title-font-family = "Berkeley Mono";
-      window-theme = "dark";
+      window-theme = "light";
       window-padding-x = 5;
       window-save-state = "always";
 
