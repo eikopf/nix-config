@@ -50,6 +50,7 @@ in
     swayidle
     foot
     rofi
+    rofi-power-menu
     grim
     slurp
     wl-clipboard
@@ -207,7 +208,7 @@ in
 
           # sway management
           "${modifier}+Shift+c" = "reload";
-          "${modifier}+Shift+e" = "exec swaynag -t warning -m 'Exit Sway?' -B 'Yes' 'swaymsg exit'";
+          "${modifier}+Shift+e" = "exec rofi -show power-menu -modi \"power-menu:${pkgs.rofi-power-menu}/bin/rofi-power-menu --no-symbols\"";
           "${modifier}+Shift+b" = "exec systemctl --user is-active --quiet waybar && systemctl --user stop waybar || systemctl --user start waybar";
           "${modifier}+r" = "mode resize";
         };
