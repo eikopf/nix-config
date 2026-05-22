@@ -30,6 +30,10 @@ in
   # graphics
   hardware.graphics.enable = true;
 
+  # AMD Cezanne iGPU: disable atomic modesetting to prevent brief black-frame
+  # flashes during compositor operations (surface creation, clipboard changes).
+  environment.sessionVariables.WLR_DRM_NO_ATOMIC = "1";
+
   # login manager
   services.greetd = {
     enable = true;
