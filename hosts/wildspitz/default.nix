@@ -289,25 +289,37 @@ in
           width:   40%;
       }
 
+      mainbox {
+          children: [inputbar, separator, listview];
+      }
+
       inputbar {
           spacing:  6px;
           padding:  0 0 6px 0;
           children: [prompt, entry];
       }
 
+      separator {
+          background-color: #cecece;
+          height:           1px;
+          margin:           0 0 4px 0;
+      }
+
       listview {
-          spacing:   2px;
           scrollbar: false;
       }
 
       element {
-          padding: 4px 6px;
-          spacing: 6px;
+          padding:      4px 6px;
+          spacing:      6px;
+          border:       0 0 1px 0;
+          border-color: #cecece;
       }
 
       element selected {
           background-color: #585858;
           text-color:       #ffffff;
+          border-color:     #585858;
       }
 
       element-text {
