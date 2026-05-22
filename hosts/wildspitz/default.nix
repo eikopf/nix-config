@@ -439,6 +439,8 @@ in
 
   enabledLanguages = with languages; [
     nix
+    c
+    javascript
   ];
 
   # minimum nix compat version

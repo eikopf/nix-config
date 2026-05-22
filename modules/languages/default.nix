@@ -27,6 +27,7 @@ in
 
   c = mkLang "c" (config: {
     packages = with pkgs; [
+      gcc
       clang-tools
     ];
   });
