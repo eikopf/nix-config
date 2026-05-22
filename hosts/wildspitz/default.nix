@@ -274,14 +274,14 @@ in
             background-color: #f5f5f5;
             text-color:       #303030;
             border-color:     #585858;
-            font:             "Berkeley Mono 10";
+            font:             'Berkeley Mono 10';
             padding:          0;
             margin:           0;
             spacing:          0;
         }
 
         window {
-            border:  2px solid;
+            border:  2px;
             padding: 8px;
             width:   400px;
         }
