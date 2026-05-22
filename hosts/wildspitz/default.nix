@@ -74,7 +74,6 @@ in
         output = {
           "DP-1" = {
             scale = "1.5";
-            bg = "${../../wallpaper/gris.jpg} fill";
           };
         };
 
@@ -252,6 +251,20 @@ in
     };
 
     gtk.enable = true;
+
+    # swaybg wallpaper (as a service so sway config reloads don't kill it)
+    systemd.user.services.swaybg = {
+      Unit = {
+        Description = "swaybg wallpaper";
+        PartOf = [ "graphical-session.target" ];
+        After = [ "graphical-session.target" ];
+      };
+      Service = {
+        ExecStart = "${pkgs.swaybg}/bin/swaybg -o DP-1 -i ${../../wallpaper/gris.jpg} -m fill";
+        Restart = "on-failure";
+      };
+      Install.WantedBy = [ "graphical-session.target" ];
+    };
 
     # mako notification daemon
     services.mako = {
