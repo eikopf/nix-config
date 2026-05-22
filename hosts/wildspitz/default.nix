@@ -269,55 +269,57 @@ in
     # rofi launcher
     programs.rofi = {
       enable = true;
-      theme = ''
-        * {
-            background-color: #f5f5f5;
-            text-color:       #303030;
-            border-color:     #585858;
-            font:             'Berkeley Mono 10';
-            padding:          0;
-            margin:           0;
-            spacing:          0;
-        }
-
-        window {
-            border:  2px;
-            padding: 8px;
-            width:   400px;
-        }
-
-        inputbar {
-            spacing:  6px;
-            padding:  0 0 6px 0;
-            children: [prompt, entry];
-        }
-
-        listview {
-            spacing:   2px;
-            scrollbar: false;
-        }
-
-        element {
-            padding: 4px 6px;
-            spacing: 6px;
-        }
-
-        element selected {
-            background-color: #585858;
-            text-color:       #ffffff;
-        }
-
-        element-text {
-            background-color: transparent;
-            text-color:       inherit;
-        }
-
-        element-icon {
-            background-color: transparent;
-            size:             1em;
-        }
-      '';
+      extraConfig.theme = "alabaster";
     };
+
+    xdg.dataFile."rofi/themes/alabaster.rasi".text = ''
+      * {
+          background-color: #f5f5f5;
+          text-color:       #303030;
+          border-color:     #585858;
+          font:             "Berkeley Mono 10";
+          padding:          0;
+          margin:           0;
+          spacing:          0;
+      }
+
+      window {
+          border:  2px;
+          padding: 8px;
+          width:   400px;
+      }
+
+      inputbar {
+          spacing:  6px;
+          padding:  0 0 6px 0;
+          children: [prompt, entry];
+      }
+
+      listview {
+          spacing:   2px;
+          scrollbar: false;
+      }
+
+      element {
+          padding: 4px 6px;
+          spacing: 6px;
+      }
+
+      element selected {
+          background-color: #585858;
+          text-color:       #ffffff;
+      }
+
+      element-text {
+          background-color: transparent;
+          text-color:       inherit;
+      }
+
+      element-icon {
+          background-color: transparent;
+          size:             1em;
+      }
+    '';
 
     # mako notification daemon
     services.mako = {
