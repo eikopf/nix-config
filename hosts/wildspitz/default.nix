@@ -286,7 +286,7 @@ in
       window {
           border:  2px;
           padding: 8px;
-          width:   400px;
+          width:   40%;
       }
 
       inputbar {
