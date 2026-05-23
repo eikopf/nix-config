@@ -14,6 +14,9 @@
   # networking
   networking.hostName = "wildspitz";
 
+  # latest kernel for better AMD hardware support
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # Sway (Wayland compositor)
   programs.sway = {
     enable = true;
@@ -32,6 +35,15 @@
         user = "greeter";
       };
     };
+  };
+
+  # xdg-desktop-portal — required for screen sharing, file pickers, and
+  # PipeWire-based capture under Wayland
+  xdg.portal = {
+    enable = true;
+    wlr.enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.common.default = "*";
   };
 
   programs.firefox.enable = true;
