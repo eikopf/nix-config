@@ -34,8 +34,8 @@
     };
   };
 
-  # install firefox
   programs.firefox.enable = true;
+  programs.thunderbird.enable = true;
 
   environment.systemPackages = with pkgs; [
     # Sway essentials
