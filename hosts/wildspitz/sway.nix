@@ -152,7 +152,7 @@ in
         "XF86AudioMicMute" = "exec pactl set-source-mute @DEFAULT_SOURCE@ toggle";
 
         # lock screen
-        "${modifier}+Ctrl+l" = "exec swaylock -c 000000";
+        "${modifier}+Ctrl+l" = "exec swaylock -f -c 000000";
 
         # sway management
         "${modifier}+Shift+c" = "reload";
