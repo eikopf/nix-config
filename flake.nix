@@ -42,10 +42,12 @@
       inherit (self) outputs;
       inherit (nixpkgs) lib;
 
-      mkLanguages = system: import ./modules/languages {
-        inherit lib;
-        pkgs = import nixpkgs { inherit system; };
-      };
+      mkLanguages =
+        system:
+        import ./modules/languages {
+          inherit lib;
+          pkgs = import nixpkgs { inherit system; };
+        };
 
       mkHomeManagerModule = user: {
         home-manager.useGlobalPkgs = true;
@@ -90,7 +92,12 @@
         darwin.lib.darwinSystem {
           inherit system;
           specialArgs = {
-            inherit self user inputs outputs;
+            inherit
+              self
+              user
+              inputs
+              outputs
+              ;
             languages = mkLanguages system;
           };
 
@@ -101,21 +108,24 @@
             ./modules/languages/selection.nix
             home-manager.darwinModules.home-manager
             nix-homebrew.darwinModules.nix-homebrew
-            (mkHomeManagerModule user // {
-              nix-homebrew = {
-                inherit user;
-                enable = true;
+            (
+              mkHomeManagerModule user
+              // {
+                nix-homebrew = {
+                  inherit user;
+                  enable = true;
 
-                # declare taps explicitly
-                taps = {
-                  "homebrew/homebrew-core" = homebrew-core;
-                  "homebrew/homebrew-cask" = homebrew-cask;
+                  # declare taps explicitly
+                  taps = {
+                    "homebrew/homebrew-core" = homebrew-core;
+                    "homebrew/homebrew-cask" = homebrew-cask;
+                  };
+
+                  # disable imperatively added taps
+                  mutableTaps = false;
                 };
-
-                # disable imperatively added taps
-                mutableTaps = false;
-              };
-            })
+              }
+            )
 
             # set homebrew.taps to the declared nix-homebrew taps
             (

@@ -8,7 +8,10 @@
 }:
 let
   modifier = "Mod4";
-  gaps = { inner = 10; outer = 5; };
+  gaps = {
+    inner = 10;
+    outer = 5;
+  };
   # Sway places windows at (outer + inner) px from the screen edge,
   # because the inner gap applies to outer edges too. Verified empirically:
   # windows sit at x=15 with outer=5 and inner=10.
@@ -208,8 +211,10 @@ in
 
           # sway management
           "${modifier}+Shift+c" = "reload";
-          "${modifier}+Shift+e" = "exec rofi -show power-menu -modi \"power-menu:${pkgs.rofi-power-menu}/bin/rofi-power-menu --no-symbols\"";
-          "${modifier}+Shift+b" = "exec systemctl --user is-active --quiet waybar && systemctl --user stop waybar || systemctl --user start waybar";
+          "${modifier}+Shift+e" =
+            "exec rofi -show power-menu -modi \"power-menu:${pkgs.rofi-power-menu}/bin/rofi-power-menu --no-symbols\"";
+          "${modifier}+Shift+b" =
+            "exec systemctl --user is-active --quiet waybar && systemctl --user stop waybar || systemctl --user start waybar";
           "${modifier}+r" = "mode resize";
         };
 
@@ -235,7 +240,7 @@ in
           };
         };
 
-        bars = [];
+        bars = [ ];
 
         startup = [
           { command = "swaymsg workspace number 1"; }
@@ -369,7 +374,11 @@ in
           height = 28;
           spacing = 0;
           modules-left = [ "sway/workspaces" ];
-          modules-right = [ "memory" "clock#date" "clock#time" ];
+          modules-right = [
+            "memory"
+            "clock#date"
+            "clock#time"
+          ];
 
           "sway/workspaces" = {
             disable-scroll = true;
