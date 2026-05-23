@@ -14,6 +14,7 @@
     ./neovide.nix
     ./neovim.nix
     ./starship.nix
+    ./xdg.nix
     ./zoxide.nix
   ];
 
