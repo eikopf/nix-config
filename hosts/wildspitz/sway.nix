@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, config, ... }:
 let
   modifier = "Mod4";
   gaps = {
@@ -142,8 +142,8 @@ in
         "${modifier}+Shift+0" = "move container to workspace number 10";
 
         # screenshots (grim + slurp)
-        "${modifier}+Ctrl+3" = "exec grim ~/screenshots/$(date +%F-%H-%M-%S).png";
-        "${modifier}+Ctrl+4" = "exec grim -g \"$(slurp)\" ~/screenshots/$(date +%F-%H-%M-%S).png";
+        "${modifier}+Ctrl+3" = "exec grim ${config.xdg.userDirs.pictures}/screenshots/$(date +%F-%H-%M-%S).png";
+        "${modifier}+Ctrl+4" = "exec grim -g \"$(slurp)\" ${config.xdg.userDirs.pictures}/screenshots/$(date +%F-%H-%M-%S).png";
 
         # volume
         "XF86AudioRaiseVolume" = "exec pactl set-sink-volume @DEFAULT_SINK@ +10%";

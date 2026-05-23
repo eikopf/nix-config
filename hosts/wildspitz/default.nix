@@ -85,7 +85,17 @@
       size = 24;
     };
 
-    gtk.enable = true;
+    gtk = {
+      enable = true;
+      theme = {
+        name = "adw-gtk3";
+        package = pkgs.adw-gtk3;
+      };
+      iconTheme = {
+        name = "Adwaita";
+        package = pkgs.adwaita-icon-theme;
+      };
+    };
 
     # swaybg wallpaper (as a service so sway config reloads don't kill it)
     systemd.user.services.swaybg = {
@@ -100,6 +110,11 @@
       };
       Install.WantedBy = [ "graphical-session.target" ];
     };
+
+    # create $XDG_PICTURES_DIR/screenshots — grim writes here
+    systemd.user.tmpfiles.rules = [
+      "d %h/pictures/screenshots 0755 - - -"
+    ];
 
     # disable programs not used on this host
     programs.kitty.enable = lib.mkForce false;
