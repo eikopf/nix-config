@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   user,
   languages,
@@ -327,8 +328,8 @@ in
     '';
 
     # disable programs not used on this host
-    programs.kitty.enable = false;
-    programs.neovide.enable = false;
+    programs.kitty.enable = lib.mkForce false;
+    programs.neovide.enable = lib.mkForce false;
 
     # mako notification daemon
     services.mako = {
