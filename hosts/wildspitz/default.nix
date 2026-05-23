@@ -72,6 +72,7 @@
   home-manager.users.${user} = {
     imports = [
       ./sway.nix
+      ./swayidle.nix
       ./waybar.nix
       ./rofi.nix
     ];
