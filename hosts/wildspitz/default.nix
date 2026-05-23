@@ -326,6 +326,10 @@ in
       }
     '';
 
+    # disable programs not used on this host
+    programs.kitty.enable = false;
+    programs.neovide.enable = false;
+
     # mako notification daemon
     services.mako = {
       enable = true;
