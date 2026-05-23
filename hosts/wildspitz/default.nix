@@ -37,6 +37,13 @@
   programs.firefox.enable = true;
   programs.thunderbird.enable = true;
 
+  # Force native Wayland rendering to avoid blurriness from XWayland upscaling
+  # under fractional scaling (DP-1 @ 1.5×).
+  environment.sessionVariables = {
+    MOZ_ENABLE_WAYLAND = "1"; # Firefox / Thunderbird
+    ELECTRON_OZONE_PLATFORM_HINT = "auto"; # Electron 22+ apps
+  };
+
   environment.systemPackages = with pkgs; [
     # Sway essentials
     swaylock
