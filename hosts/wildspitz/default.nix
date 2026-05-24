@@ -14,6 +14,15 @@
   # networking
   networking.hostName = "wildspitz";
 
+  # SSH server — allows logging in from other machines on the network
+  services.openssh = {
+    enable = true;
+    settings = {
+      PasswordAuthentication = false; # key-based auth only
+      PermitRootLogin = "no";
+    };
+  };
+
   # latest kernel for better AMD hardware support
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
