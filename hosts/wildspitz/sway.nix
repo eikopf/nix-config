@@ -9,6 +9,7 @@ in
 {
   wayland.windowManager.sway = {
     enable = true;
+    systemd.enable = true;
     config = {
       inherit modifier;
       terminal = "ghostty";
