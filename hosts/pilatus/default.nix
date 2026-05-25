@@ -45,7 +45,6 @@
     qemu # emulator
 
     # docker tooling
-    colima
     docker
 
     gh # github CLI integration
