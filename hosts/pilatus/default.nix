@@ -46,6 +46,7 @@
 
     # docker tooling
     docker
+    orbstack
 
     gh # github CLI integration
     tmux # terminal multiplexer
