@@ -26,6 +26,16 @@
   # latest kernel for better AMD hardware support
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Early KMS: load amdgpu in the initrd so the driver owns the display
+  # pipeline from the very start of boot, before simpledrm (EFI framebuffer)
+  # takes over. Without this, amdgpu loads late, probes DP-1 while the monitor
+  # is off, marks it disconnected, and never properly re-initialises it when the
+  # monitor powers on later (the HPD event is silently dropped).
+  # video=DP-1:e forces the output to stay enabled even when HPD reports no
+  # display attached, so signal is present the moment the monitor comes on.
+  boot.initrd.kernelModules = [ "amdgpu" ];
+  boot.kernelParams = [ "video=DP-1:e" ];
+
   # Sway (Wayland compositor)
   programs.sway = {
     enable = true;
