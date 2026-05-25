@@ -6,7 +6,11 @@
       character.success_symbol = "λ";
       character.error_symbol = "λ";
 
-      hostname.ssh_only = false;
+      hostname = {
+        ssh_only = false;
+        ssh_symbol = "";
+      };
+
       username = {
         show_always = true;
         format = "[$user]($style)@";
