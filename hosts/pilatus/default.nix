@@ -22,7 +22,6 @@
   # Syncthing — keeps the Calibre library in sync with Wildspitz.
   # nix-darwin has no services.syncthing module, so we install the package and
   # run it as a launchd user agent instead.
-  environment.systemPackages = [ pkgs.syncthing ];
   launchd.user.agents.syncthing = {
     serviceConfig = {
       ProgramArguments = [
@@ -50,6 +49,8 @@
   };
 
   environment.systemPackages = with pkgs; [
+    syncthing # kept in sync with launchd agent above
+
     # embedded ESP tooling
     ccache # compiler cache for c/c++
     cmake # c build system
