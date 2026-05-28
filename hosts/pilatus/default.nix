@@ -19,8 +19,21 @@
   # on this setting being accurate to work correctly
   nix.package = pkgs.lix;
 
-  # Syncthing — keeps the Calibre library in sync with Wildspitz
-  services.syncthing.enable = true;
+  # Syncthing — keeps the Calibre library in sync with Wildspitz.
+  # nix-darwin has no services.syncthing module, so we install the package and
+  # run it as a launchd user agent instead.
+  environment.systemPackages = [ pkgs.syncthing ];
+  launchd.user.agents.syncthing = {
+    serviceConfig = {
+      ProgramArguments = [
+        "${pkgs.syncthing}/bin/syncthing"
+        "--no-browser"
+        "--no-restart" # let launchd handle restarts
+      ];
+      KeepAlive = true;
+      RunAtLoad = true;
+    };
+  };
 
   homebrew = {
     enable = true;
