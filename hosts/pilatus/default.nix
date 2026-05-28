@@ -19,6 +19,9 @@
   # on this setting being accurate to work correctly
   nix.package = pkgs.lix;
 
+  # Syncthing — keeps the Calibre library in sync with Wildspitz
+  services.syncthing.enable = true;
+
   homebrew = {
     enable = true;
     global.autoUpdate = false;

@@ -76,7 +76,17 @@
     ELECTRON_OZONE_PLATFORM_HINT = "auto"; # Electron 22+ apps
   };
 
+  # Syncthing — keeps the Calibre library in sync with Pilatus
+  services.syncthing = {
+    enable = true;
+    user = "oliver";
+    dataDir = "/home/oliver";
+    openDefaultPorts = true; # 22000/tcp (sync) + 21027/udp (discovery)
+  };
+
   environment.systemPackages = with pkgs; [
+    calibre # ebook manager (library synced with Pilatus via Syncthing)
+
     # Sway essentials
     swaylock
     swayidle
