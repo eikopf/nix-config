@@ -19,7 +19,7 @@ let
         script = pkgs.writeShellScript "thunderbird" ''
           ${lib.getExe pkgs.thunderbird} "$@"
           _status=$?
-          rmdir "$HOME/Thunderbird" 2>/dev/null || true
+          rmdir "$HOME/Thunderbird" "$HOME/thunderbird" 2>/dev/null || true
           exit "$_status"
         '';
       in
