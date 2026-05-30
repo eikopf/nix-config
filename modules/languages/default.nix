@@ -125,7 +125,7 @@ in
   nix = mkLang "nix" (config: {
     packages = with pkgs; [
       nixd
-      nixfmt-rfc-style
+      nixfmt
     ];
   });
 
