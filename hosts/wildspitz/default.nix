@@ -6,6 +6,29 @@
   languages,
   ...
 }:
+let
+  # Thunderbird creates an empty ~/Thunderbird directory on every startup (a
+  # side-effect of it initialising its default profile-root path), even though
+  # all real data lives in ~/.thunderbird.  This wrapper runs the real binary
+  # and then removes the empty directory once Thunderbird exits, keeping ~ tidy.
+  thunderbird = pkgs.symlinkJoin {
+    name = "thunderbird";
+    paths = [ pkgs.thunderbird ];
+    postBuild =
+      let
+        script = pkgs.writeShellScript "thunderbird" ''
+          ${lib.getExe pkgs.thunderbird} "$@"
+          _status=$?
+          rmdir "$HOME/Thunderbird" 2>/dev/null || true
+          exit "$_status"
+        '';
+      in
+      ''
+        rm "$out/bin/thunderbird"
+        ln -s ${script} "$out/bin/thunderbird"
+      '';
+  };
+in
 {
   imports = [
     ./hardware-configuration.nix
@@ -67,7 +90,6 @@
   };
 
   programs.firefox.enable = true;
-  programs.thunderbird.enable = true;
 
   # Force native Wayland rendering to avoid blurriness from XWayland upscaling
   # under fractional scaling (DP-1 @ 1.5×).
@@ -85,6 +107,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    thunderbird # wrapped to suppress the spurious ~/Thunderbird directory
     calibre # ebook manager (library synced with Pilatus via Syncthing)
 
     # Sway essentials
