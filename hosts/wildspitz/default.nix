@@ -196,6 +196,7 @@ in
     nix
     c
     javascript
+    lean
   ];
 
   # minimum nix compat version
