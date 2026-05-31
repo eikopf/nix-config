@@ -19,7 +19,7 @@ in
         alabaster
       ];
       userSettings = {
-        "workbench.colorTheme" = "Alabaster Light";
+        "workbench.colorTheme" = "Alabaster";
       };
     };
   };
