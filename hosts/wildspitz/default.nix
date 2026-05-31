@@ -182,6 +182,15 @@ in
     # enable programs specific to this host
     programs.vscode.enable = lib.mkForce true;
 
+    # gpg-agent, also acting as the SSH agent.
+    # gcr is required for pinentry-gnome3 to work outside of a full GNOME session.
+    home.packages = [ pkgs.gcr ];
+    services.gpg-agent = {
+      enable = true;
+      enableSshSupport = true;
+      pinentry.package = pkgs.pinentry-gnome3;
+    };
+
     # mako notification daemon
     services.mako = {
       enable = true;
