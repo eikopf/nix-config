@@ -80,6 +80,11 @@ in
     };
   };
 
+  # keychain — needed for VSCode (and other apps) to store secrets securely.
+  # PAM integration ensures the keyring is unlocked automatically on login.
+  services.gnome.gnome-keyring.enable = true;
+  security.pam.services.greetd.enableGnomeKeyring = true;
+
   # xdg-desktop-portal — required for screen sharing, file pickers, and
   # PipeWire-based capture under Wayland
   xdg.portal = {
