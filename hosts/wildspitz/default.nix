@@ -174,6 +174,9 @@ in
     programs.kitty.enable = lib.mkForce false;
     programs.neovide.enable = lib.mkForce false;
 
+    # enable programs specific to this host
+    programs.vscode.enable = lib.mkForce true;
+
     # mako notification daemon
     services.mako = {
       enable = true;
