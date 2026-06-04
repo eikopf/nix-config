@@ -37,17 +37,10 @@ in
   # networking
   networking.hostName = "wildspitz";
 
+  # exposed ports
   networking.firewall.allowedTCPPorts = [
     8080 # calibre content server
     9090 # calibre wireless device connection
-  ];
-
-  networking.firewall.allowedUDPPorts = [
-    # some calibre UDP discovery ports, as defined in
-    # https://github.com/kovidgoyal/calibre/blob/master/src/calibre/devices/smart_device_app/driver.py
-    39001
-    44044
-    48123
   ];
 
   # Prefer wired over WiFi: disable WiFi radio when any ethernet link comes up,
