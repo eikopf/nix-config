@@ -37,6 +37,12 @@ in
   # networking
   networking.hostName = "wildspitz";
 
+  # exposed ports
+  networking.firewall.allowedTCPPorts = [
+    8080 # calibre content server
+    9090 # calibre wireless device connection
+  ];
+
   # Prefer wired over WiFi: disable WiFi radio when any ethernet link comes up,
   # re-enable it if ethernet goes down so we're never left without connectivity.
   # A dispatcher script is required here because NetworkManager has no native
