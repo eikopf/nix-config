@@ -103,14 +103,6 @@ in
     ELECTRON_OZONE_PLATFORM_HINT = "auto"; # Electron 22+ apps
   };
 
-  # Calibre content server — serves the ebook library to wireless devices
-  services.calibre-server = {
-    enable = true;
-    openFirewall = true;
-    user = "oliver";
-    libraries = [ "/home/oliver/documents/library" ];
-  };
-
   # Syncthing — keeps the Calibre library in sync with Pilatus
   services.syncthing = {
     enable = true;
