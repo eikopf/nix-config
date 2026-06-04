@@ -37,11 +37,16 @@ in
   # networking
   networking.hostName = "wildspitz";
 
-  # exposed ports
-  networking.firewall.allowedTCPPorts = [
-    8080 # calibre content server
-    9090 # calibre wireless device connection
-  ];
+  networking.firewall = {
+    allowedTCPPorts = [
+      8080 # calibre content server
+      9090 # calibre wireless device server
+    ];
+
+    allowedUDPPorts = [
+      59678 # calibre client discovery
+    ];
+  };
 
   # Prefer wired over WiFi: disable WiFi radio when any ethernet link comes up,
   # re-enable it if ethernet goes down so we're never left without connectivity.
@@ -62,6 +67,11 @@ in
       type = "basic";
     }
   ];
+
+  services.avahi = {
+    enable = true;
+    nssmdns4 = true;
+  };
 
   # SSH server — allows logging in from other machines on the network
   services.openssh = {
