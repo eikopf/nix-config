@@ -44,7 +44,7 @@ in
     ];
 
     allowedUDPPorts = [
-      59678 # calibre client discovery
+      54982 # calibre wireless device discovery (KOReader broadcasts here to find the server)
     ];
   };
 
