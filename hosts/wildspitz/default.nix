@@ -247,6 +247,7 @@ in
     c
     javascript
     lean
+    lua
   ];
 
   # minimum nix compat version
