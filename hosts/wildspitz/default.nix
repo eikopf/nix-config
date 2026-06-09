@@ -45,11 +45,6 @@
     }
   ];
 
-  services.avahi = {
-    enable = true;
-    nssmdns4 = true;
-  };
-
   # SSH server — allows logging in from other machines on the network
   services.openssh = {
     enable = true;

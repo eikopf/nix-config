@@ -13,10 +13,6 @@
   # can get the exact value by running `dscl . -read /Users/<user> UniqueID`
   users.users.${user}.uid = 501;
 
-  environment.systemPackages = with pkgs; [
-    aerospace
-  ];
-
   security.pam.services.sudo_local.touchIdAuth = true;
 
   # this is apparently necessary for an ongoing migration, and will be
