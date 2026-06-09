@@ -23,12 +23,6 @@
   # dconf — required for GTK apps to persist settings
   programs.dconf.enable = true;
 
-  # GPG agent — handles GPG keys and doubles as the SSH agent
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-  };
-
   # printing
   services.printing.enable = true;
 

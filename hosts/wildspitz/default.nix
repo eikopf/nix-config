@@ -97,6 +97,8 @@
   # PAM integration ensures the keyring is unlocked automatically on login.
   services.gnome.gnome-keyring.enable = true;
   security.pam.services.greetd.enableGnomeKeyring = true;
+  # gpg-agent (below) is the SSH agent; prevent gcr from competing for SSH_AUTH_SOCK.
+  services.gnome.gcr-ssh-agent.enable = false;
 
   # xdg-desktop-portal — required for screen sharing, file pickers, and
   # PipeWire-based capture under Wayland
@@ -151,7 +153,7 @@
     # enable programs specific to this host
     programs.vscode.enable = true;
 
-    # gpg-agent, also acting as the SSH agent.
+    # gpg-agent is the sole SSH agent on this host.
     # gcr is required for pinentry-gnome3 to work outside of a full GNOME session.
     home.packages = [ pkgs.gcr ];
     services.gpg-agent = {
