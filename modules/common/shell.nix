@@ -21,23 +21,19 @@ in
     shellAliases = shellAliases;
   };
 
+  # Tools configured via home-manager (home/) are intentionally not listed here;
+  # home-manager owns their installation alongside their configuration.
   environment.systemPackages = with pkgs; [
-    atuin
-    eza
-    fish
+    fish # must be system-level so NixOS registers it in /etc/shells
     fzf
-    hyfetch
     jq
-    jujutsu
     man
     man-pages
     man-pages-posix
     pandoc
     ripgrep
-    starship
     tree-sitter
     tlrc
-    zoxide
   ];
 
   environment.variables = rec {

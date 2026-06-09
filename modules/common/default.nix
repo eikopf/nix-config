@@ -7,8 +7,9 @@
   ];
 
   # base packages installed by all hosts
+  # Tools configured via home-manager (home/) are intentionally not listed here;
+  # home-manager owns their installation alongside their configuration.
   environment.systemPackages = with pkgs; [
-    git
     git-extras
     readline
     rlwrap
@@ -16,8 +17,7 @@
     vim
     wget
     curl
-    neovim
-    fish
+    fish # must be system-level so NixOS registers it in /etc/shells
     hyperfine
     just
   ];

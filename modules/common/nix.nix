@@ -28,8 +28,9 @@
   ];
 
   # nix utilities
+  # Tools configured via home-manager (home/) are intentionally not listed here;
+  # home-manager owns their installation alongside their configuration.
   environment.systemPackages = with pkgs; [
     devenv
-    direnv
   ];
 }
