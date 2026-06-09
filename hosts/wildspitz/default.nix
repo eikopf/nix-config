@@ -3,7 +3,6 @@
   lib,
   pkgs,
   user,
-  languages,
   ...
 }:
 let
@@ -242,13 +241,13 @@ in
     };
   };
 
-  enabledLanguages = with languages; [
-    nix
-    c
-    javascript
-    lean
-    lua
-  ];
+  languages = {
+    nix.enable = true;
+    c.enable = true;
+    javascript.enable = true;
+    lean.enable = true;
+    lua.enable = true;
+  };
 
   # minimum nix compat version
   system.stateVersion = "25.11";

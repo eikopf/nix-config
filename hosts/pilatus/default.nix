@@ -1,7 +1,6 @@
 {
   user,
   pkgs,
-  languages,
   ...
 }:
 {
@@ -73,25 +72,25 @@
     monitorcontrol # external display controller
   ];
 
-  enabledLanguages = with languages; [
-    c
-    chez
-    haskell
-    hledger
-    idris2
-    janet
-    java
-    javascript
-    lean
-    lua
-    markdown
-    nix
-    ocaml
-    python
-    # racket
-    rust
-    typst
-  ];
+  languages = {
+    c.enable = true;
+    chez.enable = true;
+    haskell.enable = true;
+    hledger.enable = true;
+    idris2.enable = true;
+    janet.enable = true;
+    java.enable = true;
+    javascript.enable = true;
+    lean.enable = true;
+    lua.enable = true;
+    markdown.enable = true;
+    nix.enable = true;
+    ocaml.enable = true;
+    python.enable = true;
+    # racket.enable = true;
+    rust.enable = true;
+    typst.enable = true;
+  };
 
   nixpkgs.config.allowUnfree = true;
 

@@ -42,13 +42,6 @@
       inherit (self) outputs;
       inherit (nixpkgs) lib;
 
-      mkLanguages =
-        system:
-        import ./modules/languages {
-          inherit lib;
-          pkgs = import nixpkgs { inherit system; };
-        };
-
       mkHomeManagerModule = user: {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
@@ -68,14 +61,13 @@
           inherit system;
           specialArgs = {
             inherit user inputs outputs;
-            languages = mkLanguages system;
           };
 
           modules = [
             ./hosts/${name}
             ./modules/common
             ./modules/nixos
-            ./modules/languages/selection.nix
+            ./modules/languages
             home-manager.nixosModules.home-manager
             (mkHomeManagerModule user)
           ]
@@ -98,14 +90,13 @@
               inputs
               outputs
               ;
-            languages = mkLanguages system;
           };
 
           modules = [
             ./hosts/${name}
             ./modules/common
             ./modules/darwin
-            ./modules/languages/selection.nix
+            ./modules/languages
             home-manager.darwinModules.home-manager
             nix-homebrew.darwinModules.nix-homebrew
             (
