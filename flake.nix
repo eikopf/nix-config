@@ -33,13 +33,10 @@
       nixpkgs,
       darwin,
       nix-homebrew,
-      homebrew-core,
-      homebrew-cask,
       home-manager,
       ...
     }@inputs:
     let
-      inherit (self) outputs;
       inherit (nixpkgs) lib;
 
       mkHomeManagerModule = user: {
@@ -55,12 +52,12 @@
           user,
           name,
           system,
-          extraModules,
+          extraModules ? [ ],
         }:
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit user inputs outputs;
+            inherit user;
           };
 
           modules = [
@@ -79,17 +76,12 @@
           user,
           name,
           system,
-          extraModules,
+          extraModules ? [ ],
         }:
         darwin.lib.darwinSystem {
           inherit system;
           specialArgs = {
-            inherit
-              self
-              user
-              inputs
-              outputs
-              ;
+            inherit self user inputs;
           };
 
           modules = [
@@ -99,32 +91,7 @@
             ./modules/languages
             home-manager.darwinModules.home-manager
             nix-homebrew.darwinModules.nix-homebrew
-            (
-              mkHomeManagerModule user
-              // {
-                nix-homebrew = {
-                  inherit user;
-                  enable = true;
-
-                  # declare taps explicitly
-                  taps = {
-                    "homebrew/homebrew-core" = homebrew-core;
-                    "homebrew/homebrew-cask" = homebrew-cask;
-                  };
-
-                  # disable imperatively added taps
-                  mutableTaps = false;
-                };
-              }
-            )
-
-            # set homebrew.taps to the declared nix-homebrew taps
-            (
-              { config, ... }:
-              {
-                homebrew.taps = builtins.attrNames config.nix-homebrew.taps;
-              }
-            )
+            (mkHomeManagerModule user)
           ]
           ++ extraModules;
         };
@@ -135,14 +102,12 @@
           user = "oliver";
           name = "rigi";
           system = "x86_64-linux";
-          extraModules = [ ];
         };
 
         wildspitz = mkNixosHost {
           user = "oliver";
           name = "wildspitz";
           system = "x86_64-linux";
-          extraModules = [ ];
         };
       };
 
@@ -151,7 +116,6 @@
           user = "oliver";
           name = "pilatus";
           system = "aarch64-darwin";
-          extraModules = [ ];
         };
       };
     };
