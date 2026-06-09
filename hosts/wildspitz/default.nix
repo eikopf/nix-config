@@ -249,6 +249,6 @@ in
     lua.enable = true;
   };
 
-  # minimum nix compat version
+  # release at first install — do not change
   system.stateVersion = "25.11";
 }

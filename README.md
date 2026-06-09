@@ -10,7 +10,9 @@ This flake is roughly structured as follows:
 - `modules` holds all other configuration modules, including:
     - `modules/common` defines configurations for both NixOS and macOS.
     - `modules/darwin` defines macOS-specific configurations.
+    - `modules/nixos` defines NixOS-specific configurations.
     - `modules/languages` is responsible for controlling per-language configurations.
+- `wallpaper` holds wallpaper assets used by the desktop configurations.
 
 ```
 .
@@ -18,18 +20,46 @@ This flake is roughly structured as follows:
 ├── flake.nix
 ├── home
 ├── hosts
-│   ├── pilatus
-│   └── rigi
-└── modules
-    ├── common
-    │   ├── default.nix
-    │   └── *.nix
-    ├── darwin
-    │   ├── default.nix
-    │   └── *.nix
-    └── languages
-        ├── default.nix
-        └── selection.nix
+│   ├── pilatus
+│   ├── rigi
+│   └── wildspitz
+├── modules
+│   ├── common
+│   │   ├── default.nix
+│   │   └── *.nix
+│   ├── darwin
+│   │   ├── default.nix
+│   │   └── *.nix
+│   ├── languages
+│   │   └── default.nix
+│   └── nixos
+│       ├── default.nix
+│       └── *.nix
+└── wallpaper
+```
+
+## Usage
+
+### Rebuilding
+
+On NixOS hosts:
+```
+sudo nixos-rebuild switch --flake ~/.config/nix
+```
+
+On macOS hosts:
+```
+darwin-rebuild switch --flake ~/.config/nix
+```
+
+Check all host configurations evaluate correctly (no build):
+```
+nix flake check --no-build
+```
+
+Format all Nix files:
+```
+nix fmt
 ```
 
 ## Notes
@@ -40,7 +70,11 @@ The steps for setting up a new macOS host are as follows:
 1. Duplicate an existing Darwin host configuration and modify it to use the new filename.
 2. Install the Lix fork of Nix.[^lix]
 3. Clone this repository into `~/.config/nix`.
-4. Run `nix run nix-darwin/nix-darwin-24.11#darwin-rebuild -- switch ~/.config/nix` to build the configuration on the current host. Notice that this explicitly points to the `24.11` version of `nix-darwin`, but this should match with the version of `nix-darwin` defined in `flake.nix`.
+4. Bootstrap `nix-darwin` using the same branch pinned in `flake.nix`'s `darwin` input (currently `nix-darwin-26.05`):
+   ```
+   nix run github:LnL7/nix-darwin/<branch>#darwin-rebuild -- switch --flake ~/.config/nix
+   ```
+   Replace `<branch>` with the ref from the `darwin.url` line in `flake.nix`.
 5. At this point `nix-darwin` is installed and future rebuilds can be run with `darwin-rebuild switch --flake ~/.config/nix` instead.
 
 

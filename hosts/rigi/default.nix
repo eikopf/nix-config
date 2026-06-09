@@ -37,6 +37,6 @@
   # install firefox
   programs.firefox.enable = true;
 
-  # minimum nix compat version
+  # release at first install — do not change
   system.stateVersion = "24.11";
 }
