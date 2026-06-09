@@ -37,6 +37,11 @@ in
   ];
 
   environment.variables = {
+    # Fallback editor for root and other non-home-manager contexts (NixOS
+    # otherwise defaults this to nano). User sessions get EDITOR = nvim from
+    # home/neovim.nix; vim is used here because it's installed system-wide.
+    EDITOR = "vim";
+
     # XDG directories
     XDG_CACHE_HOME = "$HOME/.cache";
     XDG_CONFIG_HOME = "$HOME/.config";
