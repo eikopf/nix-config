@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 let
   gaps = {
     inner = 10;
@@ -8,23 +8,10 @@ let
   edgeGap = gaps.outer + gaps.inner;
 in
 {
-  systemd.user.services.waybar = {
-    Unit = {
-      Description = "Waybar";
-      PartOf = [ "graphical-session.target" ];
-      After = [ "graphical-session.target" ];
-    };
-    Service = {
-      ExecStart = "${pkgs.waybar}/bin/waybar";
-      Restart = "on-failure";
-    };
-    Install = {
-      WantedBy = [ "graphical-session.target" ];
-    };
-  };
-
   programs.waybar = {
     enable = true;
+    # Let HM generate the waybar.service unit (WantedBy graphical-session.target).
+    systemd.enable = true;
     settings = [
       {
         layer = "top";

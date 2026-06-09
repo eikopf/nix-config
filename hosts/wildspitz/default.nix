@@ -127,15 +127,11 @@
   environment.systemPackages = with pkgs; [
     calibre # ebook manager (library synced with Pilatus via Syncthing)
 
-    # Sway essentials
+    # Needed on PATH by sway keybindings
     swaylock
-    swayidle
-    foot
-    rofi-power-menu
     grim
     slurp
     wl-clipboard
-    waybar
   ];
 
   # home-manager config

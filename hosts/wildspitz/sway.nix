@@ -9,6 +9,11 @@ in
 {
   wayland.windowManager.sway = {
     enable = true;
+    # Use the system-level sway (programs.sway) which has the gtk wrapper enabled;
+    # HM manages only the config, not the package.
+    package = null;
+    # Config validation runs sway --validate which needs a binary; skip it when package = null.
+    checkConfig = false;
     systemd.enable = true;
     config = {
       inherit modifier;
