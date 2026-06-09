@@ -10,6 +10,9 @@ lib.mkIf pkgs.stdenv.isLinux {
     userDirs = {
       enable = true;
       createDirectories = true;
+      # export XDG_*_DIR variables into the session (set explicitly because
+      # the home-manager default flips to false at stateVersion 26.05)
+      setSessionVariables = true;
       desktop = "${config.home.homeDirectory}/desktop";
       documents = "${config.home.homeDirectory}/documents";
       download = "${config.home.homeDirectory}/downloads";
