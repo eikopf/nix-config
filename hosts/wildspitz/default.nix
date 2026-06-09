@@ -5,32 +5,10 @@
   user,
   ...
 }:
-let
-  # Thunderbird creates an empty ~/Thunderbird directory on every startup (a
-  # side-effect of it initialising its default profile-root path), even though
-  # all real data lives in ~/.thunderbird.  This wrapper runs the real binary
-  # and then removes the empty directory once Thunderbird exits, keeping ~ tidy.
-  thunderbird = pkgs.symlinkJoin {
-    name = "thunderbird";
-    paths = [ pkgs.thunderbird ];
-    postBuild =
-      let
-        script = pkgs.writeShellScript "thunderbird" ''
-          ${lib.getExe pkgs.thunderbird} "$@"
-          _status=$?
-          rmdir "$HOME/Thunderbird" "$HOME/thunderbird" 2>/dev/null || true
-          exit "$_status"
-        '';
-      in
-      ''
-        rm "$out/bin/thunderbird"
-        ln -s ${script} "$out/bin/thunderbird"
-      '';
-  };
-in
 {
   imports = [
     ./hardware-configuration.nix
+    ./thunderbird.nix
   ];
 
   # networking
@@ -147,7 +125,6 @@ in
   };
 
   environment.systemPackages = with pkgs; [
-    thunderbird # wrapped to suppress the spurious ~/Thunderbird directory
     calibre # ebook manager (library synced with Pilatus via Syncthing)
 
     # Sway essentials
@@ -168,46 +145,7 @@ in
       ./swayidle.nix
       ./waybar.nix
       ./rofi.nix
-    ];
-
-    # cursor and GTK settings
-    home.pointerCursor = {
-      gtk.enable = true;
-      name = "Adwaita";
-      package = pkgs.adwaita-icon-theme;
-      size = 24;
-    };
-
-    gtk = {
-      enable = true;
-      theme = {
-        name = "adw-gtk3";
-        package = pkgs.adw-gtk3;
-      };
-      gtk4.theme = null;
-      iconTheme = {
-        name = "Adwaita";
-        package = pkgs.adwaita-icon-theme;
-      };
-    };
-
-    # swaybg wallpaper (as a service so sway config reloads don't kill it)
-    systemd.user.services.swaybg = {
-      Unit = {
-        Description = "swaybg wallpaper";
-        PartOf = [ "graphical-session.target" ];
-        After = [ "graphical-session.target" ];
-      };
-      Service = {
-        ExecStart = "${pkgs.swaybg}/bin/swaybg -o DP-1 -i ${../../wallpaper/gris.jpg} -m fill";
-        Restart = "on-failure";
-      };
-      Install.WantedBy = [ "graphical-session.target" ];
-    };
-
-    # create $XDG_PICTURES_DIR/screenshots — grim writes here
-    systemd.user.tmpfiles.rules = [
-      "d %h/pictures/screenshots 0755 - - -"
+      ./desktop-theme.nix
     ];
 
     # disable programs not used on this host
@@ -224,20 +162,6 @@ in
       enable = true;
       enableSshSupport = true;
       pinentry.package = pkgs.pinentry-gnome3;
-    };
-
-    # mako notification daemon
-    services.mako = {
-      enable = true;
-      settings = {
-        font = "Berkeley Mono 10";
-        background-color = "#f5f5f5";
-        text-color = "#303030";
-        border-color = "#585858";
-        border-size = 2;
-        border-radius = 0;
-        default-timeout = 5000;
-      };
     };
   };
 

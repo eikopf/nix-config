@@ -40,6 +40,17 @@ This flake is roughly structured as follows:
 
 ## Usage
 
+A `justfile` at the repo root wraps the common commands. Run `just` (or `just --list`) to see all recipes.
+
+| Recipe | What it does |
+|--------|-------------|
+| `just switch` | Rebuild and activate the current host |
+| `just check` | Evaluate every host config, build nothing |
+| `just fmt` | Format all Nix files |
+| `just update` | Update all flake inputs |
+
+The underlying commands, if you prefer to run them directly:
+
 ### Rebuilding
 
 On NixOS hosts:
