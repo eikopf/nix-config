@@ -1,5 +1,5 @@
-# NOTE: this host is still probably broken, but can't be checked without an
-# available nixos machine
+# NOTE: this config evaluates cleanly (covered by flake checks) but hasn't
+# been booted recently — hardware behaviour is untested
 
 {
   config,

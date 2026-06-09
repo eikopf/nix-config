@@ -39,6 +39,12 @@
     let
       inherit (nixpkgs) lib;
 
+      supportedSystems = [
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
+      forAllSystems = lib.genAttrs supportedSystems;
+
       mkHomeManagerModule = user: {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
@@ -97,6 +103,21 @@
         };
     in
     {
+      formatter = forAllSystems (system: nixpkgs.legacyPackages.${system}.nixfmt);
+
+      # checks exist so `nix flake check` evaluates every host config; cross-host
+      # regressions surface immediately even though only the current system's
+      # checks get built locally.
+      checks = {
+        x86_64-linux = {
+          rigi = self.nixosConfigurations.rigi.config.system.build.toplevel;
+          wildspitz = self.nixosConfigurations.wildspitz.config.system.build.toplevel;
+        };
+        aarch64-darwin = {
+          pilatus = self.darwinConfigurations.pilatus.system;
+        };
+      };
+
       nixosConfigurations = {
         rigi = mkNixosHost {
           user = "oliver";
