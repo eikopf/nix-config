@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   alabaster = pkgs.vscode-utils.buildVscodeMarketplaceExtension {
     mktplcRef = {
@@ -11,7 +11,7 @@ let
 in
 {
   programs.vscode = {
-    enable = false; # enabled per-host; see e.g. hosts/wildspitz/default.nix
+    enable = lib.mkDefault false; # disabled by default; hosts opt in (e.g. hosts/wildspitz/default.nix)
     profiles.default.extensions = with pkgs.vscode-extensions; [
       leanprover.lean4
       vscodevim.vim

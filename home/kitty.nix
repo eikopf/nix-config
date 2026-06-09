@@ -1,7 +1,7 @@
-{ ... }:
+{ lib, ... }:
 {
   programs.kitty = {
-    enable = true;
+    enable = lib.mkDefault true;
     settings = {
       scrollback_lines = 10000;
       enable_audio_bell = false;

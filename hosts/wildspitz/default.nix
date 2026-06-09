@@ -211,11 +211,11 @@ in
     ];
 
     # disable programs not used on this host
-    programs.kitty.enable = lib.mkForce false;
-    programs.neovide.enable = lib.mkForce false;
+    programs.kitty.enable = false;
+    programs.neovide.enable = false;
 
     # enable programs specific to this host
-    programs.vscode.enable = lib.mkForce true;
+    programs.vscode.enable = true;
 
     # gpg-agent, also acting as the SSH agent.
     # gcr is required for pinentry-gnome3 to work outside of a full GNOME session.

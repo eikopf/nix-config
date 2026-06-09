@@ -1,7 +1,7 @@
-{ ... }:
+{ lib, ... }:
 {
   programs.neovide = {
-    enable = true;
+    enable = lib.mkDefault true;
     settings = {
       frame = "transparent";
       font = {
