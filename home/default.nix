@@ -1,6 +1,7 @@
 { user, ... }:
 {
   imports = [
+    ./anki.nix
     ./atuin.nix
     ./delta.nix
     ./direnv.nix
