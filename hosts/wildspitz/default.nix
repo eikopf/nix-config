@@ -146,6 +146,7 @@
     programs.neovide.enable = false;
 
     # enable programs specific to this host
+    programs.anki.enable = true;
     programs.vscode.enable = true;
 
     # gpg-agent is the sole SSH agent on this host.
