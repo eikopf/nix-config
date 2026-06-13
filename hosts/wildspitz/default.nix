@@ -165,6 +165,7 @@
     javascript.enable = true;
     lean.enable = true;
     lua.enable = true;
+    python.enable = true;
   };
 
   # release at first install — do not change
