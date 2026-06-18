@@ -11,6 +11,7 @@
   # home-manager owns their installation alongside their configuration.
   environment.systemPackages = with pkgs; [
     git-extras
+    gnupg
     readline
     rlwrap
     tree
