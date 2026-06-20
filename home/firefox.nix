@@ -67,7 +67,6 @@
 
       settings = {
         "browser.aboutConfig.showWarning" = false;
-        "widget.use-xdg-desktop-portal.file-picker" = 1;
       };
     };
   };
