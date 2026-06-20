@@ -104,8 +104,6 @@
     config.common.default = "*";
   };
 
-  programs.firefox.enable = true;
-
   # Force native Wayland rendering to avoid blurriness from XWayland upscaling
   # under fractional scaling (DP-1 @ 1.5×).
   environment.sessionVariables = {
@@ -147,6 +145,7 @@
 
     # enable programs specific to this host
     programs.anki.enable = true;
+    programs.firefox.enable = true;
     programs.vscode.enable = true;
 
     # gpg-agent is the sole SSH agent on this host.

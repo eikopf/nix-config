@@ -6,6 +6,7 @@
     ./delta.nix
     ./direnv.nix
     ./eza.nix
+    ./firefox.nix
     ./fish.nix
     ./ghostty.nix
     ./git.nix
