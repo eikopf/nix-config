@@ -31,6 +31,13 @@
         Locked = false;
       };
 
+      # disable suggestions
+      FirefoxSuggest = {
+        WebSuggestions = false;
+        SponsoredSuggestions = false;
+        ImproveSuggest = false;
+      };
+
       ExtensionSettings = {
         # uBlock Origin
         "uBlock0@raymondhill.net" = {
@@ -44,6 +51,13 @@
           install_url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
           private_browsing = true;
           default_area = "navbar";
+        };
+      };
+
+      # extension-specific settings
+      "3rdparty".Extensions = {
+        "uBlock0@raymondhill.net".userSettings = {
+          showIconBadge = false;
         };
       };
     };
