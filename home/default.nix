@@ -10,6 +10,7 @@
     ./fish.nix
     ./ghostty.nix
     ./git.nix
+    ./gpg.nix
     ./hyfetch.nix
     ./jujutsu.nix
     ./kitty.nix
