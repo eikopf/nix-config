@@ -10,7 +10,7 @@
       DisablePocket = true;
       DontCheckDefaultBrowser = true;
       OfferToSaveLoginsDefault = false;
-      SkipTermsOfUser = true;
+      SkipTermsOfUse = true;
       OverrideFirstRunPage = "";
       OverridePostUpdatePage = "";
 
