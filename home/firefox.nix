@@ -3,6 +3,7 @@
   programs.firefox = {
     enable = lib.mkDefault false;
 
+    # see https://firefox-admin-docs.mozilla.org/reference/policies/ for details
     policies = {
       # disable telemetry and annoying features
       DisableTelemetry = true;
@@ -36,6 +37,13 @@
         WebSuggestions = false;
         SponsoredSuggestions = false;
         ImproveSuggest = false;
+      };
+
+      # disable user messages
+      UserMessaging = {
+        SkipOnboarding = true;
+        MoreFromMozilla = false;
+        FirefoxLabs = false;
       };
 
       ExtensionSettings = {
