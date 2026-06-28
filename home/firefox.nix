@@ -32,6 +32,15 @@
         Locked = false;
       };
 
+      # set locales
+      RequestedLocales = [
+        "en-CH"
+        "en-AU"
+        "en-US"
+        "de-CH"
+        "de-DE"
+      ];
+
       # disable suggestions
       FirefoxSuggest = {
         WebSuggestions = false;
