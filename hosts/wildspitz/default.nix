@@ -67,7 +67,7 @@
   # (https://calibre.<tailnet>.ts.net) and virtual IP, leaving Wildspitz's
   # hostname free for other services (one unit like this per service).
   # The tailnet-side half lives in the admin console: the svc:calibre
-  # definition, host approval, and an ACL grant for access.
+  # definition, host approval, and an ACL grant for access (ports 443 + 9090).
   # `serve --service` only runs in the background, so model it as a oneshot
   # whose stop action clears the service config again.
   systemd.services.tailscale-serve-calibre = {
@@ -80,8 +80,17 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      # Points at the nginx sanitizer (8081) rather than calibre (8080) directly.
-      ExecStart = "${config.services.tailscale.package}/bin/tailscale serve --service=svc:calibre --yes --https=443 127.0.0.1:8081";
+      ExecStart = [
+        # Content server: HTTPS, via the nginx sanitizer (8081) rather than
+        # calibre (8080) directly.
+        "${config.services.tailscale.package}/bin/tailscale serve --service=svc:calibre --yes --https=443 127.0.0.1:8081"
+        # Wireless device (ereader sync) server: raw TCP, no HTTP involved so
+        # it goes straight to calibre. KOReader must use manual connection
+        # mode (calibre.<tailnet>.ts.net, port 9090) — UDP discovery
+        # broadcasts don't traverse the tailnet.
+        "${config.services.tailscale.package}/bin/tailscale serve --service=svc:calibre --yes --tcp=9090 tcp://127.0.0.1:9090"
+      ];
+      # Clears the whole service config, i.e. both port mappings above.
       ExecStop = "${config.services.tailscale.package}/bin/tailscale serve clear svc:calibre";
     };
   };
