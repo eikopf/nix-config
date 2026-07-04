@@ -22,6 +22,10 @@
   networking.firewall = {
     trustedInterfaces = [ config.services.tailscale.interfaceName ];
 
+    allowedTCPPorts = [
+      8083 # calibre-web-automated (LAN: KOReader's userspace tailscaled can't originate tailnet connections)
+    ];
+
     allowedUDPPorts = [
       config.services.tailscale.port
     ];
@@ -32,8 +36,10 @@
   # backend; daemonless, and the podman module wires netavark up to nftables
   # automatically). The container starts as root and drops to PUID/PGID, so
   # everything it writes to the library and config mounts stays owned by
-  # oliver:users. Published on loopback only — exposure is via tailscale
-  # serve below.
+  # oliver:users. Published on all interfaces: tailnet access goes via
+  # tailscale serve below, but the Kindle (KOReader) needs plain LAN access —
+  # its tailscaled runs userspace-networking without proxy flags, which only
+  # handles inbound connections. Auth is CWA's own login either way.
   virtualisation.podman.enable = true;
   virtualisation.oci-containers = {
     backend = "podman";
@@ -51,7 +57,7 @@
         "/home/oliver/documents/library-ingest:/cwa-book-ingest" # drop books here to auto-import
         "/home/oliver/documents/library:/calibre-library" # calibre library (metadata.db)
       ];
-      ports = [ "127.0.0.1:8083:8083" ];
+      ports = [ "8083:8083" ];
     };
   };
 
