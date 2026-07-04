@@ -22,56 +22,55 @@
   networking.firewall = {
     trustedInterfaces = [ config.services.tailscale.interfaceName ];
 
-    allowedTCPPorts = [
-      8080 # calibre content server
-      9090 # calibre wireless device server
-    ];
-
     allowedUDPPorts = [
-      54982 # calibre wireless device discovery (KOReader broadcasts here to find the server)
       config.services.tailscale.port
     ];
   };
 
-  # TEMPORARY (remove once calibre accepts empty header values): calibre's
-  # content server 400s any request carrying a header with an empty value
-  # ("Failed to parse header line"), though RFC 9110 §5.5 allows them.
-  # Tailscale serve unconditionally injects Tailscale-User-* identity headers
-  # on requests from remote peers, and Tailscale-User-Profile-Pic is empty for
-  # IdPs that supply no avatar (Sign in with Apple), so svc:calibre works from
-  # Wildspitz but fails from every other machine. Reported upstream to calibre;
-  # until fixed, interpose nginx to drop the identity headers (calibre doesn't
-  # consume them). proxy_set_header with an empty value removes the header.
-  services.nginx = {
-    enable = true;
-    virtualHosts."calibre-sanitizer" = {
-      listen = [
-        {
-          addr = "127.0.0.1";
-          port = 8081;
-        }
-      ];
-      locations."/" = {
-        proxyPass = "http://127.0.0.1:8080";
-        extraConfig = ''
-          proxy_set_header Host $host;
-          proxy_set_header Tailscale-User-Login "";
-          proxy_set_header Tailscale-User-Name "";
-          proxy_set_header Tailscale-User-Profile-Pic "";
-        '';
+  # Calibre-Web-Automated — containerised ebook server replacing the desktop
+  # calibre content server. Runs rootful under podman (the nixpkgs default
+  # backend; daemonless, and the podman module wires netavark up to nftables
+  # automatically). The container starts as root and drops to PUID/PGID, so
+  # everything it writes to the library and config mounts stays owned by
+  # oliver:users. Published on loopback only — exposure is via tailscale
+  # serve below.
+  virtualisation.podman.enable = true;
+  virtualisation.oci-containers = {
+    backend = "podman";
+    containers.calibre-web-automated = {
+      # Pinned release tag, registry-qualified so podman short-name
+      # resolution can't misfire under systemd; bump deliberately.
+      image = "docker.io/crocodilestick/calibre-web-automated:v4.0.6";
+      environment = {
+        PUID = "1000"; # oliver
+        PGID = "100"; # users
+        TZ = config.time.timeZone;
       };
+      volumes = [
+        "/var/lib/calibre-web-automated:/config" # app.db, CWA state
+        "/home/oliver/documents/library-ingest:/cwa-book-ingest" # drop books here to auto-import
+        "/home/oliver/documents/library:/calibre-library" # calibre library (metadata.db)
+      ];
+      ports = [ "127.0.0.1:8083:8083" ];
     };
   };
 
-  # Serve Calibre as a Tailscale Service: it gets its own DNS name
-  # (https://calibre.<tailnet>.ts.net) and virtual IP, leaving Wildspitz's
+  # The container chowns these to PUID:PGID at startup, but they must exist
+  # before podman can bind-mount them.
+  systemd.tmpfiles.rules = [
+    "d /var/lib/calibre-web-automated 0750 oliver users -"
+    "d /home/oliver/documents/library-ingest 0755 oliver users -"
+  ];
+
+  # Serve Calibre-Web-Automated as a Tailscale Service: it gets its own DNS
+  # name (https://calibre.<tailnet>.ts.net) and virtual IP, leaving Wildspitz's
   # hostname free for other services (one unit like this per service).
   # The tailnet-side half lives in the admin console: the svc:calibre
-  # definition, host approval, and an ACL grant for access (ports 443 + 9090).
+  # definition, host approval, and an ACL grant for access (port 443).
   # `serve --service` only runs in the background, so model it as a oneshot
   # whose stop action clears the service config again.
   systemd.services.tailscale-serve-calibre = {
-    description = "Advertise the Calibre content server as Tailscale Service svc:calibre";
+    description = "Advertise Calibre-Web-Automated as Tailscale Service svc:calibre";
     after = [ "tailscaled.service" ];
     requires = [ "tailscaled.service" ];
     wantedBy = [ "multi-user.target" ];
@@ -80,17 +79,11 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = [
-        # Content server: HTTPS, via the nginx sanitizer (8081) rather than
-        # calibre (8080) directly.
-        "${config.services.tailscale.package}/bin/tailscale serve --service=svc:calibre --yes --https=443 127.0.0.1:8081"
-        # Wireless device (ereader sync) server: raw TCP, no HTTP involved so
-        # it goes straight to calibre. KOReader must use manual connection
-        # mode (calibre.<tailnet>.ts.net, port 9090) — UDP discovery
-        # broadcasts don't traverse the tailnet.
-        "${config.services.tailscale.package}/bin/tailscale serve --service=svc:calibre --yes --tcp=9090 tcp://127.0.0.1:9090"
-      ];
-      # Clears the whole service config, i.e. both port mappings above.
+      # Straight to the container — unlike stock calibre, CWA tolerates the
+      # empty Tailscale-User-* header values that serve injects, so no
+      # sanitizing proxy is needed.
+      ExecStart = "${config.services.tailscale.package}/bin/tailscale serve --service=svc:calibre --yes --https=443 127.0.0.1:8083";
+      # Clears the whole service config, i.e. the port mapping above.
       ExecStop = "${config.services.tailscale.package}/bin/tailscale serve clear svc:calibre";
     };
   };
@@ -172,17 +165,7 @@
     ELECTRON_OZONE_PLATFORM_HINT = "auto"; # Electron 22+ apps
   };
 
-  # Syncthing — keeps the Calibre library in sync with Pilatus
-  services.syncthing = {
-    enable = true;
-    user = "oliver";
-    dataDir = "/home/oliver";
-    openDefaultPorts = true; # 22000/tcp (sync) + 21027/udp (discovery)
-  };
-
   environment.systemPackages = with pkgs; [
-    calibre # ebook manager (library synced with Pilatus via Syncthing)
-
     # Needed on PATH by sway keybindings
     swaylock
     grim
