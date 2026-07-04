@@ -12,13 +12,12 @@
 
   # systemd
   systemd.network.wait-online.enable = false;
-  systemd.services.tailscaled.serviceConfig.Environment = [
-    "TS_DEBUG_FIREWALL_MODE=nftables"
-  ];
 
   # networking
   networking.hostName = "wildspitz";
   networking.nftables.enable = true;
+
+  services.tailscale.enable = true;
 
   networking.firewall = {
     trustedInterfaces = [ config.services.tailscale.interfaceName ];
