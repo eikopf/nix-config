@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   user,
   ...
@@ -11,10 +10,19 @@
     ./thunderbird.nix
   ];
 
+  # systemd
+  systemd.network.wait-online.enable = false;
+  systemd.services.tailscaled.serviceConfig.Environment = [
+    "TS_DEBUG_FIREWALL_MODE=nftables"
+  ];
+
   # networking
   networking.hostName = "wildspitz";
+  networking.nftables.enable = true;
 
   networking.firewall = {
+    trustedInterfaces = [ config.services.tailscale.interfaceName ];
+
     allowedTCPPorts = [
       8080 # calibre content server
       9090 # calibre wireless device server
@@ -22,8 +30,11 @@
 
     allowedUDPPorts = [
       54982 # calibre wireless device discovery (KOReader broadcasts here to find the server)
+      config.services.tailscale.port
     ];
   };
+
+  boot.initrd.systemd.network.wait-online.enable = false;
 
   # Prefer wired over WiFi: disable WiFi radio when any ethernet link comes up,
   # re-enable it if ethernet goes down so we're never left without connectivity.
@@ -45,29 +56,18 @@
     }
   ];
 
-  # SSH server — allows logging in from other machines on the network
   services.openssh = {
     enable = true;
     settings = {
-      PasswordAuthentication = false; # key-based auth only
+      PasswordAuthentication = false;
       PermitRootLogin = "no";
     };
   };
 
-  # latest kernel for better AMD hardware support
   boot.kernelPackages = pkgs.linuxPackages_latest;
-
-  # Early KMS: load amdgpu in the initrd so the driver owns the display
-  # pipeline from the very start of boot, before simpledrm (EFI framebuffer)
-  # takes over. Without this, amdgpu loads late, probes DP-1 while the monitor
-  # is off, marks it disconnected, and never properly re-initialises it when the
-  # monitor powers on later (the HPD event is silently dropped).
-  # video=DP-1:e forces the output to stay enabled even when HPD reports no
-  # display attached, so signal is present the moment the monitor comes on.
   boot.initrd.kernelModules = [ "amdgpu" ];
   boot.kernelParams = [ "video=DP-1:e" ];
 
-  # Sway (Wayland compositor)
   programs.sway = {
     enable = true;
     wrapperFeatures.gtk = true;
