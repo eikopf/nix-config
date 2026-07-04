@@ -33,6 +33,36 @@
     ];
   };
 
+  # TEMPORARY (remove once calibre accepts empty header values): calibre's
+  # content server 400s any request carrying a header with an empty value
+  # ("Failed to parse header line"), though RFC 9110 §5.5 allows them.
+  # Tailscale serve unconditionally injects Tailscale-User-* identity headers
+  # on requests from remote peers, and Tailscale-User-Profile-Pic is empty for
+  # IdPs that supply no avatar (Sign in with Apple), so svc:calibre works from
+  # Wildspitz but fails from every other machine. Reported upstream to calibre;
+  # until fixed, interpose nginx to drop the identity headers (calibre doesn't
+  # consume them). proxy_set_header with an empty value removes the header.
+  services.nginx = {
+    enable = true;
+    virtualHosts."calibre-sanitizer" = {
+      listen = [
+        {
+          addr = "127.0.0.1";
+          port = 8081;
+        }
+      ];
+      locations."/" = {
+        proxyPass = "http://127.0.0.1:8080";
+        extraConfig = ''
+          proxy_set_header Host $host;
+          proxy_set_header Tailscale-User-Login "";
+          proxy_set_header Tailscale-User-Name "";
+          proxy_set_header Tailscale-User-Profile-Pic "";
+        '';
+      };
+    };
+  };
+
   # Serve Calibre as a Tailscale Service: it gets its own DNS name
   # (https://calibre.<tailnet>.ts.net) and virtual IP, leaving Wildspitz's
   # hostname free for other services (one unit like this per service).
@@ -50,7 +80,8 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${config.services.tailscale.package}/bin/tailscale serve --service=svc:calibre --yes --https=443 127.0.0.1:8080";
+      # Points at the nginx sanitizer (8081) rather than calibre (8080) directly.
+      ExecStart = "${config.services.tailscale.package}/bin/tailscale serve --service=svc:calibre --yes --https=443 127.0.0.1:8081";
       ExecStop = "${config.services.tailscale.package}/bin/tailscale serve clear svc:calibre";
     };
   };
