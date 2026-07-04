@@ -33,6 +33,28 @@
     ];
   };
 
+  # Serve Calibre as a Tailscale Service: it gets its own DNS name
+  # (https://calibre.<tailnet>.ts.net) and virtual IP, leaving Wildspitz's
+  # hostname free for other services (one unit like this per service).
+  # The tailnet-side half lives in the admin console: the svc:calibre
+  # definition, host approval, and an ACL grant for access.
+  # `serve --service` only runs in the background, so model it as a oneshot
+  # whose stop action clears the service config again.
+  systemd.services.tailscale-serve-calibre = {
+    description = "Advertise the Calibre content server as Tailscale Service svc:calibre";
+    after = [ "tailscaled.service" ];
+    requires = [ "tailscaled.service" ];
+    wantedBy = [ "multi-user.target" ];
+    # tailscaled's local API may not be ready right at boot; wait for it.
+    preStart = "until ${config.services.tailscale.package}/bin/tailscale status --peers=false >/dev/null 2>&1; do sleep 1; done";
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${config.services.tailscale.package}/bin/tailscale serve --service=svc:calibre --yes --https=443 127.0.0.1:8080";
+      ExecStop = "${config.services.tailscale.package}/bin/tailscale serve clear svc:calibre";
+    };
+  };
+
   boot.initrd.systemd.network.wait-online.enable = false;
 
   # Prefer wired over WiFi: disable WiFi radio when any ethernet link comes up,
