@@ -29,6 +29,11 @@
     allowedUDPPorts = [
       config.services.tailscale.port
     ];
+
+    # aardvark-dns serves container name resolution on the bridge gateway.
+    # The podman module only opens this for the default network's interface,
+    # so the grimmory network (fixed interface name, see below) needs it too.
+    interfaces.grimmory.allowedUDPPorts = [ 53 ];
   };
 
   # Grimmory — containerised ebook server replacing Calibre-Web-Automated.
@@ -101,12 +106,14 @@
   };
 
   # The oci-containers `networks` option only passes --network; the network
-  # itself has to be created out of band.
+  # itself has to be created out of band. The bridge gets a fixed interface
+  # name (instead of auto-assigned podmanN) so the firewall rule above can
+  # target it deterministically.
   systemd.services.podman-network-grimmory = {
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      ExecStart = "${config.virtualisation.podman.package}/bin/podman network create --ignore grimmory";
+      ExecStart = "${config.virtualisation.podman.package}/bin/podman network create --ignore --interface-name grimmory grimmory";
     };
     requiredBy = [
       "podman-grimmory.service"
