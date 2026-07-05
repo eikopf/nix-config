@@ -23,7 +23,7 @@
     trustedInterfaces = [ config.services.tailscale.interfaceName ];
 
     allowedTCPPorts = [
-      8083 # calibre-web-automated (LAN: KOReader's userspace tailscaled can't originate tailnet connections)
+      6060 # grimmory (LAN: KOReader's userspace tailscaled can't originate tailnet connections)
     ];
 
     allowedUDPPorts = [
@@ -31,52 +31,111 @@
     ];
   };
 
-  # Calibre-Web-Automated — containerised ebook server replacing the desktop
-  # calibre content server. Runs rootful under podman (the nixpkgs default
-  # backend; daemonless, and the podman module wires netavark up to nftables
-  # automatically). The container starts as root and drops to PUID/PGID, so
-  # everything it writes to the library and config mounts stays owned by
-  # oliver:users. Published on all interfaces: tailnet access goes via
-  # tailscale serve below, but the Kindle (KOReader) needs plain LAN access —
-  # its tailscaled runs userspace-networking without proxy flags, which only
-  # handles inbound connections. Auth is CWA's own login either way.
+  # Grimmory — containerised ebook server replacing Calibre-Web-Automated.
+  # Chosen because it issues restricted per-device credentials: OPDS users
+  # (browse/download) and KOReader sync credentials (reading progress) are
+  # separate credential pairs scoped to the parent account, so the Kindle
+  # never holds the main login. It's a Java app backed by MariaDB, so the one
+  # CWA container becomes two, joined by a dedicated podman network (the
+  # default network has no inter-container DNS). Runs rootful under podman
+  # (the nixpkgs default backend; daemonless, and the podman module wires
+  # netavark up to nftables automatically); both images drop to the given
+  # UID/GID, so everything written to the mounts stays owned by oliver:users.
+  # Grimmory indexes the calibre library in place — books stay where they
+  # are, metadata comes from calibre's metadata.opf sidecars, and metadata.db
+  # is simply inert.
+  #
+  # Published on all interfaces: tailnet access goes via tailscale serve
+  # below, but the Kindle (KOReader) needs plain LAN access — its tailscaled
+  # runs userspace-networking without proxy flags, which only handles inbound
+  # connections.
+  #
+  # One imperative step: both containers read DB credentials from
+  # /var/lib/grimmory/secrets.env (root-owned, outside the store), containing
+  # MYSQL_ROOT_PASSWORD, and MYSQL_PASSWORD = DATABASE_PASSWORD. The units
+  # restart until it exists.
   virtualisation.podman.enable = true;
   virtualisation.oci-containers = {
     backend = "podman";
-    containers.calibre-web-automated = {
-      # Pinned release tag, registry-qualified so podman short-name
-      # resolution can't misfire under systemd; bump deliberately.
-      image = "docker.io/crocodilestick/calibre-web-automated:v4.0.6";
+
+    # Pinned release tags, registry-qualified so podman short-name
+    # resolution can't misfire under systemd; bump deliberately.
+    containers.grimmory = {
+      image = "ghcr.io/grimmory-tools/grimmory:v3.2.4";
+      environment = {
+        USER_ID = "1000"; # oliver
+        GROUP_ID = "100"; # users
+        TZ = config.time.timeZone;
+        DATABASE_URL = "jdbc:mariadb://grimmory-mariadb:3306/grimmory";
+        DATABASE_USERNAME = "grimmory";
+      };
+      environmentFiles = [ "/var/lib/grimmory/secrets.env" ]; # DATABASE_PASSWORD
+      volumes = [
+        "/var/lib/grimmory/data:/app/data" # app state, cache, logs
+        "/home/oliver/documents/library:/books" # library, indexed in place
+        "/home/oliver/documents/library-ingest:/bookdrop" # drop books here to auto-import
+      ];
+      ports = [ "6060:6060" ];
+      networks = [ "grimmory" ];
+      # Ordering only — no health gating, but Restart=always rides out
+      # MariaDB's first-boot initialisation.
+      dependsOn = [ "grimmory-mariadb" ];
+    };
+
+    containers.grimmory-mariadb = {
+      # The linuxserver image (as in Grimmory's reference compose) for its
+      # PUID/PGID handling, keeping the data dir owned by oliver:users.
+      image = "lscr.io/linuxserver/mariadb:11.4.5";
       environment = {
         PUID = "1000"; # oliver
         PGID = "100"; # users
         TZ = config.time.timeZone;
+        MYSQL_DATABASE = "grimmory";
+        MYSQL_USER = "grimmory";
       };
-      volumes = [
-        "/var/lib/calibre-web-automated:/config" # app.db, CWA state
-        "/home/oliver/documents/library-ingest:/cwa-book-ingest" # drop books here to auto-import
-        "/home/oliver/documents/library:/calibre-library" # calibre library (metadata.db)
-      ];
-      ports = [ "8083:8083" ];
+      environmentFiles = [ "/var/lib/grimmory/secrets.env" ]; # MYSQL_{ROOT_,}PASSWORD
+      volumes = [ "/var/lib/grimmory/mariadb:/config" ];
+      # No published ports: only reachable over the grimmory podman network.
+      networks = [ "grimmory" ];
     };
   };
 
-  # The container chowns these to PUID:PGID at startup, but they must exist
-  # before podman can bind-mount them.
+  # The oci-containers `networks` option only passes --network; the network
+  # itself has to be created out of band.
+  systemd.services.podman-network-grimmory = {
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${config.virtualisation.podman.package}/bin/podman network create --ignore grimmory";
+    };
+    requiredBy = [
+      "podman-grimmory.service"
+      "podman-grimmory-mariadb.service"
+    ];
+    before = [
+      "podman-grimmory.service"
+      "podman-grimmory-mariadb.service"
+    ];
+  };
+
+  # The containers chown these to the configured UID:GID at startup, but they
+  # must exist before podman can bind-mount them.
   systemd.tmpfiles.rules = [
-    "d /var/lib/calibre-web-automated 0750 oliver users -"
+    "d /var/lib/grimmory 0750 root users -" # also holds secrets.env (0600 root)
+    "d /var/lib/grimmory/data 0750 oliver users -"
+    "d /var/lib/grimmory/mariadb 0750 oliver users -"
     "d /home/oliver/documents/library-ingest 0755 oliver users -"
   ];
 
-  # Serve Calibre-Web-Automated as a Tailscale Service: it gets its own DNS
-  # name (https://calibre.<tailnet>.ts.net) and virtual IP, leaving Wildspitz's
+  # Serve Grimmory as a Tailscale Service: it gets its own DNS name
+  # (https://grimmory.<tailnet>.ts.net) and virtual IP, leaving Wildspitz's
   # hostname free for other services (one unit like this per service).
-  # The tailnet-side half lives in the admin console: the svc:calibre
+  # The tailnet-side half lives in the admin console: the svc:grimmory
   # definition, host approval, and an ACL grant for access (port 443).
   # `serve --service` only runs in the background, so model it as a oneshot
   # whose stop action clears the service config again.
-  systemd.services.tailscale-serve-calibre = {
-    description = "Advertise Calibre-Web-Automated as Tailscale Service svc:calibre";
+  systemd.services.tailscale-serve-grimmory = {
+    description = "Advertise Grimmory as Tailscale Service svc:grimmory";
     after = [ "tailscaled.service" ];
     requires = [ "tailscaled.service" ];
     wantedBy = [ "multi-user.target" ];
@@ -85,12 +144,9 @@
     serviceConfig = {
       Type = "oneshot";
       RemainAfterExit = true;
-      # Straight to the container — unlike stock calibre, CWA tolerates the
-      # empty Tailscale-User-* header values that serve injects, so no
-      # sanitizing proxy is needed.
-      ExecStart = "${config.services.tailscale.package}/bin/tailscale serve --service=svc:calibre --yes --https=443 127.0.0.1:8083";
+      ExecStart = "${config.services.tailscale.package}/bin/tailscale serve --service=svc:grimmory --yes --https=443 127.0.0.1:6060";
       # Clears the whole service config, i.e. the port mapping above.
-      ExecStop = "${config.services.tailscale.package}/bin/tailscale serve clear svc:calibre";
+      ExecStop = "${config.services.tailscale.package}/bin/tailscale serve clear svc:grimmory";
     };
   };
 
