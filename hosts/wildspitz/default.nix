@@ -77,7 +77,7 @@
       environmentFiles = [ "/var/lib/grimmory/secrets.env" ]; # DATABASE_PASSWORD
       volumes = [
         "/var/lib/grimmory/data:/app/data" # app state, cache, logs
-        "/home/oliver/documents/library:/books" # library, indexed in place
+        "/home/oliver/documents/library:/books" # one subdir per Grimmory library (calibre, ...), indexed in place
         "/home/oliver/documents/library-ingest:/bookdrop" # drop books here to auto-import
       ];
       ports = [ "6060:6060" ];
