@@ -87,6 +87,27 @@
       dependsOn = [ "grimmory-mariadb" ];
     };
 
+    # Shelfmark — book search/request frontend (calibrain's successor to
+    # calibre-web-automated-book-downloader). Integration with Grimmory is
+    # purely file-based: downloads land in the ingest dir (its /books,
+    # Grimmory's /bookdrop) and Grimmory auto-imports them, so it needs
+    # neither the grimmory network nor any credentials. All runtime
+    # configuration (sources, users) lives in /config via the web UI.
+    # Localhost-only: no LAN clients, tailnet access via tailscale serve.
+    containers.shelfmark = {
+      image = "ghcr.io/calibrain/shelfmark:v1.3.2";
+      environment = {
+        PUID = "1000"; # oliver
+        PGID = "100"; # users
+        TZ = config.time.timeZone;
+      };
+      volumes = [
+        "/var/lib/shelfmark:/config" # settings + request database
+        "/home/oliver/documents/library-ingest:/books" # = Grimmory's /bookdrop
+      ];
+      ports = [ "127.0.0.1:8084:8084" ];
+    };
+
     containers.grimmory-mariadb = {
       # The linuxserver image (as in Grimmory's reference compose) for its
       # PUID/PGID handling, keeping the data dir owned by oliver:users.
@@ -131,6 +152,7 @@
     "d /var/lib/grimmory 0750 root users -" # also holds secrets.env (0600 root)
     "d /var/lib/grimmory/data 0750 oliver users -"
     "d /var/lib/grimmory/mariadb 0750 oliver users -"
+    "d /var/lib/shelfmark 0750 oliver users -"
     "d /home/oliver/documents/library-ingest 0755 oliver users -"
   ];
 
@@ -154,6 +176,20 @@
       ExecStart = "${config.services.tailscale.package}/bin/tailscale serve --service=svc:grimmory --yes --https=443 127.0.0.1:6060";
       # Clears the whole service config, i.e. the port mapping above.
       ExecStop = "${config.services.tailscale.package}/bin/tailscale serve clear svc:grimmory";
+    };
+  };
+
+  systemd.services.tailscale-serve-shelfmark = {
+    description = "Advertise Shelfmark as Tailscale Service svc:shelfmark";
+    after = [ "tailscaled.service" ];
+    requires = [ "tailscaled.service" ];
+    wantedBy = [ "multi-user.target" ];
+    preStart = "until ${config.services.tailscale.package}/bin/tailscale status --peers=false >/dev/null 2>&1; do sleep 1; done";
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${config.services.tailscale.package}/bin/tailscale serve --service=svc:shelfmark --yes --https=443 127.0.0.1:8084";
+      ExecStop = "${config.services.tailscale.package}/bin/tailscale serve clear svc:shelfmark";
     };
   };
 
