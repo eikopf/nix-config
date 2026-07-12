@@ -17,7 +17,14 @@
   networking.hostName = "wildspitz";
   networking.nftables.enable = true;
 
-  services.tailscale.enable = true;
+  services.tailscale = {
+    enable = true;
+    # Exit node: "server" enables the IPv4/IPv6 forwarding sysctls required
+    # to route other nodes' traffic; the set-flag advertises it on every
+    # tailscaled start. Approval still happens in the admin console.
+    useRoutingFeatures = "server";
+    extraSetFlags = [ "--advertise-exit-node" ];
+  };
 
   networking.firewall = {
     trustedInterfaces = [ config.services.tailscale.interfaceName ];
