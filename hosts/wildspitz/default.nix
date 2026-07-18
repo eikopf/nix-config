@@ -23,7 +23,10 @@
     # to route other nodes' traffic; the set-flag advertises it on every
     # tailscaled start. Approval still happens in the admin console.
     useRoutingFeatures = "server";
-    extraSetFlags = [ "--advertise-exit-node" ];
+    extraSetFlags = [
+      "--advertise-exit-node"
+      "--ssh" # Tailscale SSH: auth against tailnet identity + ACL `ssh` rules
+    ];
   };
 
   networking.firewall = {
