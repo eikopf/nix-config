@@ -55,6 +55,18 @@
     monitorcontrol # external display controller
   ];
 
+  # The application firewall shows an "allow incoming connections?" dialog on
+  # the console for unsigned binaries (all nix store binaries) and silently
+  # drops their inbound packets until it's clicked — which breaks mosh-server
+  # exactly when connecting remotely with nobody at the screen. Clicking
+  # "Allow" only whitelists one store path, so it breaks again on every mosh
+  # update; instead, re-register the live path on each activation.
+  system.activationScripts.postActivation.text = ''
+    fw=/usr/libexec/ApplicationFirewall/socketfilterfw
+    $fw --add ${pkgs.mosh}/bin/mosh-server >/dev/null
+    $fw --unblockapp ${pkgs.mosh}/bin/mosh-server >/dev/null
+  '';
+
   languages = {
     c.enable = true;
     chez.enable = true;
