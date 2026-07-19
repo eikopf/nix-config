@@ -9,6 +9,7 @@
   # base packages installed by all hosts
   environment.systemPackages = with pkgs; [
     git-extras
+    gh
     gnupg
     readline
     rlwrap
