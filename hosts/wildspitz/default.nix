@@ -1,5 +1,7 @@
 {
   config,
+  inputs,
+  lib,
   pkgs,
   user,
   ...
@@ -65,101 +67,102 @@
   # runs userspace-networking without proxy flags, which only handles inbound
   # connections.
   #
-  # One imperative step: both containers read DB credentials from
-  # /var/lib/grimmory/secrets.env (root-owned, outside the store), containing
-  # MYSQL_ROOT_PASSWORD, and MYSQL_PASSWORD = DATABASE_PASSWORD. The units
-  # restart until it exists.
-  virtualisation.podman.enable = true;
-  virtualisation.oci-containers = {
-    backend = "podman";
-
-    # Pinned release tags, registry-qualified so podman short-name
-    # resolution can't misfire under systemd; bump deliberately.
-    containers.grimmory = {
-      image = "ghcr.io/grimmory-tools/grimmory:v3.2.4";
-      environment = {
-        USER_ID = "1000"; # oliver
-        GROUP_ID = "100"; # users
-        TZ = config.time.timeZone;
-        DATABASE_URL = "jdbc:mariadb://grimmory-mariadb:3306/grimmory";
-        DATABASE_USERNAME = "grimmory";
-      };
-      environmentFiles = [ "/var/lib/grimmory/secrets.env" ]; # DATABASE_PASSWORD
-      volumes = [
-        "/var/lib/grimmory/data:/app/data" # app state, cache, logs
-        "/home/oliver/documents/library:/books" # one subdir per Grimmory library (calibre, ...), indexed in place
-        "/home/oliver/documents/library-ingest:/bookdrop" # drop books here to auto-import
-      ];
-      ports = [ "6060:6060" ];
-      networks = [ "grimmory" ];
-      # Ordering only — no health gating, but Restart=always rides out
-      # MariaDB's first-boot initialisation.
-      dependsOn = [ "grimmory-mariadb" ];
-    };
-
-    # Shelfmark — book search/request frontend (calibrain's successor to
-    # calibre-web-automated-book-downloader). Integration with Grimmory is
-    # purely file-based: downloads land in the ingest dir (its /books,
-    # Grimmory's /bookdrop) and Grimmory auto-imports them, so it needs
-    # neither the grimmory network nor any credentials. All runtime
-    # configuration (sources, users) lives in /config via the web UI.
-    # Localhost-only: no LAN clients, tailnet access via tailscale serve.
-    containers.shelfmark = {
-      image = "ghcr.io/calibrain/shelfmark:v1.3.2";
-      environment = {
-        PUID = "1000"; # oliver
-        PGID = "100"; # users
-        TZ = config.time.timeZone;
-      };
-      volumes = [
-        "/var/lib/shelfmark:/config" # settings + request database
-        "/home/oliver/documents/library-ingest:/books" # = Grimmory's /bookdrop
-      ];
-      ports = [ "127.0.0.1:8084:8084" ];
-    };
-
-    containers.grimmory-mariadb = {
-      # The linuxserver image (as in Grimmory's reference compose) for its
-      # PUID/PGID handling, keeping the data dir owned by oliver:users.
-      image = "lscr.io/linuxserver/mariadb:11.4.5";
-      environment = {
-        PUID = "1000"; # oliver
-        PGID = "100"; # users
-        TZ = config.time.timeZone;
-        MYSQL_DATABASE = "grimmory";
-        MYSQL_USER = "grimmory";
-      };
-      environmentFiles = [ "/var/lib/grimmory/secrets.env" ]; # MYSQL_{ROOT_,}PASSWORD
-      volumes = [ "/var/lib/grimmory/mariadb:/config" ];
-      # No published ports: only reachable over the grimmory podman network.
-      networks = [ "grimmory" ];
+  # Until the encrypted file has been bootstrapped, keep using the existing
+  # root-owned environment file so this migration cannot rotate the live DB
+  # password. Once present, agenix decrypts it into /run at activation time.
+  age.secrets = lib.optionalAttrs (builtins.pathExists ../../secrets/grimmory.env.age) {
+    grimmory-env = {
+      file = ../../secrets/grimmory.env.age;
+      mode = "0400";
     };
   };
+  virtualisation.quadlet =
+    let
+      inherit (config.virtualisation.quadlet) containers networks;
+      secretFile =
+        if config.age.secrets ? grimmory-env then
+          config.age.secrets.grimmory-env.path
+        else
+          "/var/lib/grimmory/secrets.env";
+      commonEnvironment = {
+        TZ = config.time.timeZone;
+      };
+    in
+    {
+      networks.grimmory.networkConfig = {
+        interfaceName = "grimmory";
+        # Adopt the network created by the old oci-containers helper on the
+        # first switch; subsequent lifecycle management belongs to Quadlet.
+        podmanArgs = [ "--ignore" ];
+      };
 
-  # The oci-containers `networks` option only passes --network; the network
-  # itself has to be created out of band. The bridge gets a fixed interface
-  # name (instead of auto-assigned podmanN) so the firewall rule above can
-  # target it deterministically.
-  systemd.services.podman-network-grimmory = {
-    serviceConfig = {
-      Type = "oneshot";
-      RemainAfterExit = true;
-      ExecStart = "${config.virtualisation.podman.package}/bin/podman network create --ignore --interface-name grimmory grimmory";
+      # Pinned release tags, registry-qualified so podman short-name
+      # resolution can't misfire under systemd; bump deliberately.
+      containers.grimmory = {
+        unitConfig = {
+          Requires = [ containers.grimmory-mariadb.ref ];
+          After = [ containers.grimmory-mariadb.ref ];
+        };
+        containerConfig = {
+          image = "ghcr.io/grimmory-tools/grimmory:v3.2.4";
+          environments = commonEnvironment // {
+            USER_ID = "1000"; # oliver
+            GROUP_ID = "100"; # users
+            DATABASE_URL = "jdbc:mariadb://grimmory-mariadb:3306/grimmory";
+            DATABASE_USERNAME = "grimmory";
+          };
+          environmentFiles = [ secretFile ]; # DATABASE_PASSWORD
+          volumes = [
+            "/var/lib/grimmory/data:/app/data" # app state, cache, logs
+            "/home/oliver/documents/library:/books" # one subdir per Grimmory library (calibre, ...), indexed in place
+            "/home/oliver/documents/library-ingest:/bookdrop" # drop books here to auto-import
+          ];
+          publishPorts = [ "6060:6060" ];
+          networks = [ networks.grimmory.ref ];
+        };
+      };
+
+      # Shelfmark — book search/request frontend (calibrain's successor to
+      # calibre-web-automated-book-downloader). Integration with Grimmory is
+      # purely file-based: downloads land in the ingest dir (its /books,
+      # Grimmory's /bookdrop) and Grimmory auto-imports them, so it needs
+      # neither the grimmory network nor any credentials. All runtime
+      # configuration (sources, users) lives in /config via the web UI.
+      # Localhost-only: no LAN clients, tailnet access via tailscale serve.
+      containers.shelfmark.containerConfig = {
+        image = "ghcr.io/calibrain/shelfmark:v1.3.2";
+        environments = commonEnvironment // {
+          PUID = "1000"; # oliver
+          PGID = "100"; # users
+        };
+        volumes = [
+          "/var/lib/shelfmark:/config" # settings + request database
+          "/home/oliver/documents/library-ingest:/books" # = Grimmory's /bookdrop
+        ];
+        publishPorts = [ "127.0.0.1:8084:8084" ];
+      };
+
+      containers.grimmory-mariadb.containerConfig = {
+        # The linuxserver image (as in Grimmory's reference compose) for its
+        # PUID/PGID handling, keeping the data dir owned by oliver:users.
+        image = "lscr.io/linuxserver/mariadb:11.4.5";
+        environments = commonEnvironment // {
+          PUID = "1000"; # oliver
+          PGID = "100"; # users
+          MYSQL_DATABASE = "grimmory";
+          MYSQL_USER = "grimmory";
+        };
+        environmentFiles = [ secretFile ]; # MYSQL_{ROOT_,}PASSWORD
+        volumes = [ "/var/lib/grimmory/mariadb:/config" ];
+        # No published ports: only reachable over the grimmory podman network.
+        networks = [ networks.grimmory.ref ];
+      };
     };
-    requiredBy = [
-      "podman-grimmory.service"
-      "podman-grimmory-mariadb.service"
-    ];
-    before = [
-      "podman-grimmory.service"
-      "podman-grimmory-mariadb.service"
-    ];
-  };
 
   # The containers chown these to the configured UID:GID at startup, but they
   # must exist before podman can bind-mount them.
   systemd.tmpfiles.rules = [
-    "d /var/lib/grimmory 0750 root users -" # also holds secrets.env (0600 root)
+    "d /var/lib/grimmory 0750 root users -" # holds the legacy secrets.env until agenix is bootstrapped
     "d /var/lib/grimmory/data 0750 oliver users -"
     "d /var/lib/grimmory/mariadb 0750 oliver users -"
     "d /var/lib/shelfmark 0750 oliver users -"
@@ -281,6 +284,7 @@
   };
 
   environment.systemPackages = with pkgs; [
+    inputs.agenix.packages.${pkgs.stdenv.hostPlatform.system}.default
     # Needed on PATH by sway keybindings
     swaylock
     grim

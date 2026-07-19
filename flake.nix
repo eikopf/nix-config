@@ -25,6 +25,15 @@
       url = "github:nix-community/home-manager/release-26.05";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    agenix = {
+      url = "github:ryantm/agenix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.darwin.follows = "darwin";
+      inputs.home-manager.follows = "home-manager";
+    };
+
+    quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
   };
 
   outputs =
@@ -63,7 +72,7 @@
         nixpkgs.lib.nixosSystem {
           inherit system;
           specialArgs = {
-            inherit user;
+            inherit inputs user;
           };
 
           modules = [
@@ -71,6 +80,8 @@
             ./modules/common
             ./modules/nixos
             ./modules/languages
+            inputs.agenix.nixosModules.default
+            inputs.quadlet-nix.nixosModules.quadlet
             home-manager.nixosModules.home-manager
             (mkHomeManagerModule user)
           ]
