@@ -14,7 +14,7 @@ let
   ];
 in
 {
-  "grimmory.env.age" = {
+  "secrets/grimmory.env.age" = {
     publicKeys = all;
     armor = true;
   };

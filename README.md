@@ -75,18 +75,17 @@ nix fmt
 
 ### Secrets
 
-Secrets are encrypted with agenix. Recipient policy lives in
-`secrets/secrets.nix`; encrypted `.age` files are safe to commit. To finish the
+Secrets are encrypted with agenix. Recipient policy lives in the root-level
+`secrets.nix`; encrypted `.age` files are safe to commit. To finish the
 one-time Grimmory migration without changing its existing database password:
 
 ```
 sudo cp /var/lib/grimmory/secrets.env /tmp/grimmory.env
 sudo chown "$USER" /tmp/grimmory.env
 chmod 600 /tmp/grimmory.env
-cd ~/.config/nix/secrets
-RULES=./secrets.nix agenix -e grimmory.env.age < /tmp/grimmory.env
+cd ~/.config/nix
+agenix -e secrets/grimmory.env.age < /tmp/grimmory.env
 rm /tmp/grimmory.env
-cd ..
 git add secrets/grimmory.env.age
 nix flake check --no-build
 sudo nixos-rebuild switch --flake .
